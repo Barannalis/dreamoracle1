@@ -1,10 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>DreamOracle Test</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DreamOracle — Rüyalarını Yorumla</title>
+  <meta name="description" content="DreamOracle, rüyalarından anlam çıkaran hafif ve hızlı bir web uygulaması. Yakında: Yapay zekâ destekli rüya yorumları!" />
+  <meta property="og:title" content="DreamOracle — Rüyalarını Yorumla" />
+  <meta property="og:description" content="Rüyalarından anlam çıkar. Yakında yapay zekâ ile yorumlar!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dreamoracle1-2ct9.vercel.app" />
+  <meta property="og:image" content="https://dreamoracle1-2ct9.vercel.app/cover.png" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%9C%3C/text%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#0f172a" />
+  <style>
+    :root{--bg:#0f172a;--card:#111827;--txt:#e5e7eb;--muted:#94a3b8;--acc:#22d3ee}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,#0f172a 0%,#0b1220 100%);color:var(--txt);font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{max-width:960px;margin:0 auto;padding:32px}
+    header{display:flex;align-items:center;gap:12px}
+    .logo{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:#0ea5e9}
+    .logo span{font-size:22px}
+    h1{margin:8px 0 0;font-size:28px}
+    .muted{color:var(--muted)}
+    .card{margin:24px 0;padding:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:16px}
+    .cta{display:inline-block;margin-top:12px;padding:12px 16px;border-radius:10px;background:var(--acc);color:#001018;text-decoration:none;font-weight:600}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .tile{padding:16px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+    footer{margin:40px 0;color:var(--muted);font-size:14px}
+    code{background:#0b1220;padding:2px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.06)}
+  </style>
 </head>
 <body>
-  <h1>🚀 DreamOracle çalışıyor!</h1>
+  <div class="wrap">
+    <header>
+      <div class="logo"><span>🌜</span></div>
+      <div>
+        <h1>DreamOracle</h1>
+        <div class="muted">Rüyalarından anlam çıkar. Yakında: Yapay zekâ ile yorumlar!</div>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Başlangıç</h2>
+      <p>Site hazır 🎉 Şimdi içeriği büyütüp özellikleri ekleyebiliriz. İlk hedefler:</p>
+      <div class="grid">
+        <div class="tile"><strong>✔ SEO</strong><br/>Sitemap, robots, başlık & açıklama eklendi.</div>
+        <div class="tile"><strong>✔ Hızlı Deploy</strong><br/>`public/` altına dosya koy, anında canlı.</div>
+        <div class="tile"><strong>⏳ AI Yorum</strong><br/>Bir sonraki adımda sohbet arayüzü.</div>
+      </div>
+      <a class="cta" href="#iletisim">Hemen İletişime Geç</a>
+    </section>
+
+    <section class="grid">
+      <div class="tile">
+        <h3>Nasıl işleyecek?</h3>
+        <p>Kısa vadede form → e-posta akışı; ardından yapay zekâ destekli yorumlama motoru.</p>
+      </div>
+      <div class="tile">
+        <h3>Hedef</h3>
+        <p>Hafif, hızlı, mobil uyumlu ve paylaşılası bir ürün. Gelir için: premium yorumlar.</p>
+      </div>
+      <div class="tile">
+        <h3>Teknik</h3>
+        <p>Statik barınma (Vercel). Sonraki fazda API uçları ile AI entegrasyonu.</p>
+      </div>
+    </section>
+
+    <section id="iletisim" class="card">
+      <h2>İletişim</h2>
+      <p>Geri bildirimin çok değerli. Şimdilik e-posta ile ulaş:</p>
+      <p><a class="cta" href="mailto:uzumcu661@gmail.com?subject=DreamOracle%20Geri%20Bildirim">E-posta Gönder</a></p>
+      <p class="muted">İstersek formservis (Formspree/Resend) ekleyip formla e-posta da atarız.</p>
+    </section>
+
+    <footer>© <span id="y"></span> DreamOracle • <a href="/sitemap.xml">Sitemap</a> • <a href="/robots.txt">Robots</a></footer>
+  </div>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>
