@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rüyanı Gönder | DreamOracle</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    body{background:#0b1220;color:#e6e9f0;font-family:system-ui,Segoe UI,Roboto,Arial}
+    .wrap{max-width:780px;margin:40px auto;padding:24px}
+    .card{background:#111828;border:1px solid #1f2937;border-radius:14px;padding:24px}
+    label{display:block;margin:.8rem 0 .35rem;color:#c7d2fe}
+    input,textarea{width:100%;padding:.9rem;background:#0f172a;border:1px solid #334155;color:#e6e9f0;border-radius:10px}
+    textarea{min-height:160px}
+    .row{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+    .btn{margin-top:14px;background:#6366f1;border:none;color:white;padding:.9rem 1.1rem;border-radius:12px;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:wait}
+    .note{font-size:.9rem;opacity:.8}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Rüyanı Gönder</h1>
+    <p class="note">Metni ne kadar ayrıntılı yazarsan yorum o kadar isabetli olur.</p>
+
+    <div class="card">
+      <form id="dreamForm" novalidate>
+        <!-- Honeypot (bot filtresi) -->
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off"/>
+
+        <div class="row">
+          <div>
+            <label>Ad (opsiyonel)</label>
+            <input name="name" placeholder="İstersen adını yazabilirsin"/>
+          </div>
+          <div>
+            <label>E-posta</label>
+            <input name="email" type="email" required placeholder="cevap için e-posta"/>
+          </div>
+        </div>
+
+        <label>Rüyan</label>
+        <textarea name="dream" required placeholder="Rüyanı ayrıntılı anlat..."></textarea>
+
+        <label class="note">
+          <input type="checkbox" id="kvkk" required />
+          Gönderdiğim içeriğin işlenmesini kabul ediyorum.
+        </label>
+
+        <button class="btn" id="sendBtn" type="submit">Gönder</button>
+        <p class="note" id="msg" style="margin-top:.6rem"></p>
+      </form>
+    </div>
+
+    <p><a href="/">← Ana sayfa</a></p>
+  </div>
+
+  <script>
+    const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgvpondb";
+
+    const form = document.getElementById('dreamForm');
+    const btn  = document.getElementById('sendBtn');
+    const msg  = document.getElementById('msg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = "";
+      if (!form.reportValidity()) return;
+
+      btn.disabled = true;
+
+      const data = {
+        name:  form.name.value,
+        email: form.email.value,
+        dream: form.dream.value,
+        page:  location.href
+      };
+
+      try {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+          method: "POST",
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          window.location.href = "/thanks.html";
+        } else {
+          msg.textContent = "Gönderim sırasında bir sorun oluştu. Lütfen tekrar dene.";
+          btn.disabled = false;
+        }
+      } catch (err) {
+        msg.textContent = "Bağlantı hatası. Birazdan tekrar dene.";
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
