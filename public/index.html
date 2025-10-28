@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>DreamOracle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DreamOracle — Rüyaları Yorumla</title>
+
+  <link rel="canonical" href="https://dreamoracle1.vercel.app/">
+  <meta name="description" content="Rüyalarından anlam çıkar. Yapay zeka destekli rüya yorumları.">
+  <meta property="og:title" content="DreamOracle — Rüyaları Yorumla">
+  <meta property="og:description" content="Rüyalarından anlam çıkar. Yapay zeka destekli rüya yorumları.">
+  <meta property="og:url" content="https://dreamoracle1.vercel.app/">
+  <meta name="robots" content="index, follow">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
+
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --acc:#38bdf8; }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,Segoe UI,Roboto,Arial}
+    .wrap{max-width:900px;margin:0 auto;padding:40px 20px}
+    .hero{background:linear-gradient(180deg,#0f172a 0,#0b1220 100%);padding:56px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    h1{font-size:40px;margin:0 0 10px}
+    p.lead{margin:0 0 24px;opacity:.9}
+    .actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{display:inline-block;padding:14px 20px;border-radius:12px;text-decoration:none;font-weight:600;border:1px solid #1f2937}
+    .btn.primary{background:var(--acc); color:#0b1020; border-color:transparent}
+    .btn.secondary{background:#0b1020}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+    .card{background:var(--card);padding:18px;border:1px solid #1f2937;border-radius:14px}
+    small{opacity:.75}
+    @media (max-width:800px){ .grid{grid-template-columns:1fr} .hero{padding:28px} h1{font-size:30px} }
+  </style>
 </head>
 <body>
-  <h1>DreamOracle yükleniyor...</h1>
+  <main class="wrap">
+    <section class="hero">
+      <h1>DreamOracle</h1>
+      <p class="lead">Rüyalarından anlam çıkar. Hafif, hızlı ve paylaşmaya hazır bir rüya yorum aracı.</p>
+      <div class="actions">
+        <a class="btn primary" href="/contact.html">Hemen İletişime Geç</a>
+        <a class="btn secondary" href="https://dreamoracle1.vercel.app/thanks.html">Örnek teşekkür sayfası</a>
+      </div>
+
+      <div class="grid">
+        <div class="card"><b>✓ SEO</b><br><small>robots.txt ve sitemap.xml eklendi.</small></div>
+        <div class="card"><b>✓ Hızlı Deploy</b><br><small>Dosyanı <code>public/</code> altına koy, anında canlı.</small></div>
+        <div class="card"><b>✓ İletişim</b><br><small>Formspree üzerinden güvenli iletişim.</small></div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
