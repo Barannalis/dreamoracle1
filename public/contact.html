@@ -1,53 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rüya Yorumu Gönder</title>
-<style>
-    body {
-        background: #0f172a;
-        color: white;
-        font-family: system-ui, sans-serif;
-        max-width: 400px;
-        margin: 40px auto;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>İletişim – DreamOracle</title>
+  <meta name="description" content="Rüyanı güvenle ilet; sana dönüş yapalım.">
+  <link rel="canonical" href="https://dreamoracle1.vercel.app/contact.html" />
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #0b1220; --fg: #e6eefc; --card:#0f1a30; --muted:#94a3b8;
+      --primary:#2b6cb0; --primary-hover:#2c5282;
     }
-    input, textarea, button {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: none;
-        margin-bottom: 12px;
-        font-size: 16px;
-    }
-    textarea {
-        height: 120px;
-    }
-    button {
-        background: #38bdf8;
-        cursor: pointer;
-        font-weight: bold;
-    }
-</style>
+    html,body{margin:0;padding:0;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial}
+    body{background:var(--bg);color:var(--fg)}
+    .container{max-width:720px;margin:0 auto;padding:24px}
+    a{color:inherit;text-decoration:none}
+    .card{background:var(--card);border:1px solid #1a2440;border-radius:16px;padding:20px}
+    label{display:block;margin:10px 0 6px 0;font-weight:600}
+    input,textarea{width:100%;background:#0b1530;border:1px solid #1a2440;color:var(--fg);
+      border-radius:12px;padding:12px;font-size:16px;outline:none}
+    input:focus,textarea:focus{border-color:#2b6cb0; box-shadow: 0 0 0 3px rgba(43,108,176,.25)}
+    .btn{display:inline-block;padding:12px 16px;border-radius:12px;border:1px solid transparent;background:var(--primary);color:#fff}
+    .btn:hover{background:var(--primary-hover)}
+    .muted{color:var(--muted)}
+    .top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:14px}
+    .back{color:var(--muted)}
+    .err{margin-top:10px}
+  </style>
 </head>
 <body>
+  <div class="container">
+    <div class="top">
+      <a class="back" href="/">← Anasayfa</a>
+      <strong>DreamOracle</strong>
+    </div>
 
-<h2>Rüyanı Gönder ✨</h2>
+    <div class="card">
+      <h2 style="margin:0 0 12px 0;">Rüyanı Gönder</h2>
+      <p class="muted" style="margin:0 0 16px 0;">Formu doldur; e-postana dönüş yapalım.</p>
 
-<form action="https://formspree.io/f/xgvpondb" method="POST">
+      <form id="dreamForm" action="https://formspree.io/f/xgvpondb" method="POST" novalidate>
+        <label>Ad Soyad</label>
+        <input type="text" name="name" required minlength="2" autocomplete="name" />
 
-    <input type="text" name="isim" placeholder="Ad Soyad" required>
-    <input type="email" name="email" placeholder="E-posta" required>
-    <textarea name="ruya" placeholder="Rüyanız..." required></textarea>
+        <label>E-posta</label>
+        <input type="email" name="email" required autocomplete="email" />
 
-    <!-- ✅ Anti-bot Honeypot -->
-    <input type="text" name="_honey" style="display:none">
+        <label>Rüyanız</label>
+        <textarea name="dream" required minlength="10" rows="6" placeholder="Rüyanı mümkün olduğunca detaylı yaz…"></textarea>
 
-    <!-- ✅ Redirect sonrası teşekkür sayfası -->
-    <input type="hidden" name="_redirect" value="https://dreamoracle1.vercel.app/thanks.html">
+        <!-- Spam koruma (honeypot) -->
+        <input type="text" name="_honey" style="display:none">
 
-    <button type="submit">Gönder</button>
-</form>
+        <!-- Mail başlığı ve yönlendirme -->
+        <input type="hidden" name="_subject" value="Yeni Rüya Mesajı (DreamOracle)">
+        <input type="hidden" name="_redirect" value="https://dreamoracle1.vercel.app/thanks.html">
 
+        <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+          <button type="submit" id="sendBtn" class="btn">Gönder</button>
+          <span id="formMsg" class="muted err"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const f = document.getElementById('dreamForm');
+      const btn = document.getElementById('sendBtn');
+      const msg = document.getElementById('formMsg');
+
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = '';
+        btn.disabled = true;
+
+        if (!f.checkValidity()) {
+          msg.textContent = 'Lütfen tüm alanları doğru doldurun.';
+          btn.disabled = false;
+          return;
+        }
+
+        const data = {
+          name: f.elements.name.value.trim(),
+          email: f.elements.email.value.trim(),
+          dream: f.elements.dream.value.trim(),
+          page: location.href
+        };
+
+        try {
+          const res = await fetch(f.action, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          if (res.ok) {
+            window.location.href = f.querySelector('input[name="_redirect"]').value;
+          } else {
+            msg.textContent = 'Gönderimde bir sorun oldu. Lütfen tekrar deneyin.';
+            btn.disabled = false;
+          }
+        } catch(err) {
+          msg.textContent = 'Bağlantı hatası. Tekrar deneyin.';
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
