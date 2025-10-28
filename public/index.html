@@ -1,69 +1,138 @@
-<!DOCTYPE html><title>DreamOracle – Rüyalardan Anlam Çıkar</title>
-<meta name="description" content="DreamOracle: Rüyalarından anlam çıkaran, hafif ve hızlı bir yorum aracı. Form ile gönder, anında yanıt al.">
-
-<link rel="canonical" href="https://dreamoracle1.vercel.app/">
-
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="DreamOracle">
-<meta property="og:title" content="DreamOracle – Rüyalardan Anlam Çıkar">
-<meta property="og:description" content="Rüyalarını paylaş, hızlı ve temiz yorum akışı.">
-<meta property="og:url" content="https://dreamoracle1.vercel.app/">
-<meta property="og:image" content="https://dreamoracle1.vercel.app/og-cover.png">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="DreamOracle – Rüyalardan Anlam Çıkar">
-<meta name="twitter:description" content="Rüyalarını paylaş, hızlı ve temiz yorum akışı.">
-<meta name="twitter:image" content="https://dreamoracle1.vercel.app/og-cover.png">
-
+<!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DreamOracle — Rüyaları Yorumla</title>
 
-  <link rel="canonical" href="https://dreamoracle1.vercel.app/">
-  <meta name="description" content="Rüyalarından anlam çıkar. Yapay zeka destekli rüya yorumları.">
-  <meta property="og:title" content="DreamOracle — Rüyaları Yorumla">
-  <meta property="og:description" content="Rüyalarından anlam çıkar. Yapay zeka destekli rüya yorumları.">
+  <title>DreamOracle – Rüyalardan Anlam Çıkar</title>
+  <meta name="description" content="DreamOracle: Rüyalarından anlam çıkaran, hafif ve hızlı bir yorum aracı. Form ile gönder, anında yanıt al.">
+  <link rel="canonical" href="https://dreamoracle1.vercel.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DreamOracle">
+  <meta property="og:title" content="DreamOracle – Rüyalardan Anlam Çıkar">
+  <meta property="og:description" content="Rüyalarını paylaş, hızlı ve temiz yorum akışı.">
   <meta property="og:url" content="https://dreamoracle1.vercel.app/">
-  <meta name="robots" content="index, follow">
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
+  <meta property="og:image" content="https://dreamoracle1.vercel.app/og-cover.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DreamOracle – Rüyalardan Anlam Çıkar">
+  <meta name="twitter:description" content="Rüyalarını paylaş, hızlı ve temiz yorum akışı.">
+  <meta name="twitter:image" content="https://dreamoracle1.vercel.app/og-cover.png">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/favicon.svg">
 
   <style>
-    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --acc:#38bdf8; }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,Segoe UI,Roboto,Arial}
-    .wrap{max-width:900px;margin:0 auto;padding:40px 20px}
-    .hero{background:linear-gradient(180deg,#0f172a 0,#0b1220 100%);padding:56px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    h1{font-size:40px;margin:0 0 10px}
-    p.lead{margin:0 0 24px;opacity:.9}
-    .actions{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{display:inline-block;padding:14px 20px;border-radius:12px;text-decoration:none;font-weight:600;border:1px solid #1f2937}
-    .btn.primary{background:var(--acc); color:#0b1020; border-color:transparent}
-    .btn.secondary{background:#0b1020}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
-    .card{background:var(--card);padding:18px;border:1px solid #1f2937;border-radius:14px}
-    small{opacity:.75}
-    @media (max-width:800px){ .grid{grid-template-columns:1fr} .hero{padding:28px} h1{font-size:30px} }
+    :root {
+      --bg: #0b1220;
+      --fg: #e6eefc;
+      --card: #0f1a30;
+      --muted: #94a3b8;
+      --primary: #2b6cb0;
+      --primary-hover: #2c5282;
+      --ring: rgba(43,108,176,.35);
+    }
+    html, body { margin:0; padding:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    body { background: var(--bg); color: var(--fg); }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 980px; margin: 0 auto; padding: 24px; }
+    header { display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom: 20px; }
+    .logo { display:flex; gap:10px; align-items:center; font-weight:700; font-size: 24px; letter-spacing:.3px; }
+    .logo img { width:28px; height:28px; }
+    .btn { display:inline-block; padding:12px 16px; border-radius:12px; border:1px solid transparent; background: var(--primary); color:#fff; box-shadow: 0 0 0 0 var(--ring); transition:.2s; }
+    .btn:hover { background: var(--primary-hover); }
+    .btn-ghost { background:transparent; border-color:#2a3655; color: var(--fg); }
+    .btn-ghost:hover { background:#14203b; }
+    .hero { background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0) 30%), radial-gradient(1200px 400px at 60% -10%, rgba(99,102,241,.12), transparent 60%);
+            border:1px solid #1a2440; border-radius:20px; padding:36px 28px; }
+    .hero h1 { font-size:44px; margin:0 0 8px 0; }
+    .hero p { color: var(--muted); margin:0 0 24px 0; }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; }
+    .grid { display:grid; gap:16px; grid-template-columns: repeat(3,1fr); margin-top:20px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: var(--card); border:1px solid #1a2440; border-radius:14px; padding:18px; }
+    .card h3 { margin:0 0 8px 0; font-size:18px; }
+    .card p { margin:0; color: var(--muted); }
+    .muted { color: var(--muted); }
+    footer { padding: 24px 0; color: var(--muted); font-size: 14px; text-align:center; }
+    #themeToggle { border-radius: 10px; }
   </style>
 </head>
 <body>
-  <main class="wrap">
+  <div class="container">
+    <header>
+      <div class="logo">
+        <img src="/favicon.svg" alt="DreamOracle">
+        DreamOracle
+      </div>
+      <div>
+        <button id="themeToggle" class="btn-ghost btn" aria-label="Tema değiştir">🌙 Tema</button>
+      </div>
+    </header>
+
     <section class="hero">
       <h1>DreamOracle</h1>
-      <p class="lead">Rüyalarından anlam çıkar. Hafif, hızlı ve paylaşmaya hazır bir rüya yorum aracı.</p>
+      <p>Rüyalarından anlam çıkar. Hafif, hızlı ve paylaşmaya hazır bir rüya yorum aracı.</p>
       <div class="actions">
-        <a class="btn primary" href="/contact.html">Hemen İletişime Geç</a>
-        <a class="btn secondary" href="https://dreamoracle1.vercel.app/thanks.html">Örnek teşekkür sayfası</a>
+        <a class="btn" href="/contact.html">Hemen İletişime Geç</a>
+        <a class="btn btn-ghost" href="/thanks.html">Örnek teşekkür sayfası</a>
       </div>
 
       <div class="grid">
-        <div class="card"><b>✓ SEO</b><br><small>robots.txt ve sitemap.xml eklendi.</small></div>
-        <div class="card"><b>✓ Hızlı Deploy</b><br><small>Dosyanı <code>public/</code> altına koy, anında canlı.</small></div>
-        <div class="card"><b>✓ İletişim</b><br><small>Formspree üzerinden güvenli iletişim.</small></div>
+        <div class="card">
+          <h3>✓ SEO</h3>
+          <p>robots.txt ve sitemap.xml eklendi.</p>
+        </div>
+        <div class="card">
+          <h3>✓ Hızlı Deploy</h3>
+          <p>Dosyayı <code>public/</code> altına koy, anında canlı.</p>
+        </div>
+        <div class="card">
+          <h3>✓ İletişim</h3>
+          <p>Formspree üzerinden güvenli iletişim.</p>
+        </div>
       </div>
     </section>
-  </main>
+
+    <footer>
+      © <span id="y"></span> DreamOracle · <a class="muted" href="/contact.html">İletişim</a>
+    </footer>
+  </div>
+
+  <script>
+    // Yıl
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Tema
+    (function() {
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      function apply(t) {
+        if (t === 'dark') {
+          root.style.setProperty('--bg', '#0b1220');
+          root.style.setProperty('--fg', '#e6eefc');
+        } else {
+          // açık temaya basit dönüş (istersen renkleri ayrı set edebiliriz)
+          root.style.removeProperty('--bg');
+          root.style.removeProperty('--fg');
+        }
+      }
+
+      let theme = saved || (prefersDark ? 'dark' : 'light');
+      apply(theme);
+
+      document.getElementById('themeToggle')?.addEventListener('click', () => {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', theme);
+        apply(theme);
+      });
+    })();
+  </script>
 </body>
 </html>
