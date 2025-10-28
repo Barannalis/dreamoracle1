@@ -1,16 +1,53 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>İletişim | DreamOracle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rüya Yorumu Gönder</title>
+<style>
+    body {
+        background: #0f172a;
+        color: white;
+        font-family: system-ui, sans-serif;
+        max-width: 400px;
+        margin: 40px auto;
+    }
+    input, textarea, button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+    textarea {
+        height: 120px;
+    }
+    button {
+        background: #38bdf8;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
 </head>
 <body>
-  <h2>İletişim Formu</h2>
-  <form <input type="hidden" name="_redirect" value="https://dreamoracle1.vercel.app/thanks.html">
-    <input type="text" name="isim" placeholder="Adınız" required><br><br>
-    <input type="email" name="email" placeholder="E-posta" required><br><br>
-    <textarea name="ruya" placeholder="Rüyanızı yazın..." required></textarea><br><br>
+
+<h2>Rüyanı Gönder ✨</h2>
+
+<form action="https://formspree.io/f/xgvpondb" method="POST">
+
+    <input type="text" name="isim" placeholder="Ad Soyad" required>
+    <input type="email" name="email" placeholder="E-posta" required>
+    <textarea name="ruya" placeholder="Rüyanız..." required></textarea>
+
+    <!-- ✅ Anti-bot Honeypot -->
+    <input type="text" name="_honey" style="display:none">
+
+    <!-- ✅ Redirect sonrası teşekkür sayfası -->
+    <input type="hidden" name="_redirect" value="https://dreamoracle1.vercel.app/thanks.html">
+
     <button type="submit">Gönder</button>
-  </form>
+</form>
+
 </body>
 </html>
