@@ -2,98 +2,122 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rüyanı Gönder | DreamOracle</title>
-  <link rel="stylesheet" href="/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rüyanı Gönder · DreamOracle</title>
+  <link rel="icon" href="/icon.png" />
+  <link rel="stylesheet" href="/styles.css" />
   <style>
-    body{background:#0b1220;color:#e6e9f0;font-family:system-ui,Segoe UI,Roboto,Arial}
-    .wrap{max-width:780px;margin:40px auto;padding:24px}
-    .card{background:#111828;border:1px solid #1f2937;border-radius:14px;padding:24px}
-    label{display:block;margin:.8rem 0 .35rem;color:#c7d2fe}
-    input,textarea{width:100%;padding:.9rem;background:#0f172a;border:1px solid #334155;color:#e6e9f0;border-radius:10px}
-    textarea{min-height:160px}
-    .row{display:grid;gap:14px;grid-template-columns:1fr 1fr}
-    .btn{margin-top:14px;background:#6366f1;border:none;color:white;padding:.9rem 1.1rem;border-radius:12px;cursor:pointer}
-    .btn:disabled{opacity:.6;cursor:wait}
-    .note{font-size:.9rem;opacity:.8}
+    body{background:#0b1220;color:#e6e9f3;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial}
+    .wrap{max-width:820px;margin:56px auto;padding:0 16px}
+    .card{background:linear-gradient(180deg,#0f1a2b,#0b1324);border:1px solid #1b2a4d;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    h1{font-size:28px;margin:0 0 6px}
+    .muted{color:#a9b3c8;margin:0 0 20px}
+    label{display:block;margin:12px 0 6px}
+    input,textarea{width:100%;background:#0a1020;border:1px solid #24365f;color:#e6e9f3;border-radius:10px;padding:12px 12px;outline:none}
+    input:focus,textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.25)}
+    textarea{min-height:180px;resize:vertical}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .row > div{flex:1 1 260px}
+    .actions{margin-top:16px;display:flex;gap:10px;align-items:center}
+    .btn{appearance:none;border:0;border-radius:10px;padding:12px 16px;font-weight:600;cursor:pointer;background:#2563eb;color:#fff}
+    .btn[disabled]{opacity:.6;cursor:not-allowed}
+    .link{color:#93c5fd;text-decoration:none}
+    .top-link{color:#93c5fd;text-decoration:none;opacity:.8}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Rüyanı Gönder</h1>
-    <p class="note">Metni ne kadar ayrıntılı yazarsan yorum o kadar isabetli olur.</p>
+    <a class="top-link" href="/index.html">← Anasayfa</a>
+    <div class="card" style="margin-top:10px">
+      <h1>Rüyanı Gönder</h1>
+      <p class="muted">Formu doldur; e-postana dönüş yapalım.</p>
 
-    <div class="card">
       <form id="dreamForm" novalidate>
-        <!-- Honeypot (bot filtresi) -->
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off"/>
+        <!-- honey pot (botlar için) -->
+        <input type="text" name="_honey" id="hp" style="display:none" tabindex="-1" autocomplete="off" />
 
         <div class="row">
           <div>
-            <label>Ad (opsiyonel)</label>
-            <input name="name" placeholder="İstersen adını yazabilirsin"/>
+            <label for="name">Ad Soyad</label>
+            <input id="name" name="name" type="text" required placeholder="Ad Soyad" />
           </div>
           <div>
-            <label>E-posta</label>
-            <input name="email" type="email" required placeholder="cevap için e-posta"/>
+            <label for="email">E-posta</label>
+            <input id="email" name="email" type="email" required placeholder="ornek@mail.com" />
           </div>
         </div>
 
-        <label>Rüyan</label>
-        <textarea name="dream" required placeholder="Rüyanı ayrıntılı anlat..."></textarea>
+        <label for="dream">Rüyanız</label>
+        <textarea id="dream" name="dream" required placeholder="Rüyanızı yazın..."></textarea>
 
-        <label class="note">
-          <input type="checkbox" id="kvkk" required />
-          Gönderdiğim içeriğin işlenmesini kabul ediyorum.
-        </label>
-
-        <button class="btn" id="sendBtn" type="submit">Gönder</button>
-        <p class="note" id="msg" style="margin-top:.6rem"></p>
+        <div class="actions">
+          <button id="submitBtn" class="btn" type="submit">Gönder</button>
+          <span id="msg" class="muted"></span>
+        </div>
       </form>
     </div>
-
-    <p><a href="/">← Ana sayfa</a></p>
   </div>
 
   <script>
-    const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgvpondb";
+    (function () {
+      const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgvpondb";
 
-    const form = document.getElementById('dreamForm');
-    const btn  = document.getElementById('sendBtn');
-    const msg  = document.getElementById('msg');
+      const form = document.getElementById("dreamForm");
+      const btn  = document.getElementById("submitBtn");
+      const msg  = document.getElementById("msg");
+      const hp   = document.getElementById("hp");
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      msg.textContent = "";
-      if (!form.reportValidity()) return;
-
-      btn.disabled = true;
-
-      const data = {
-        name:  form.name.value,
-        email: form.email.value,
-        dream: form.dream.value,
-        page:  location.href
-      };
-
-      try {
-        const res = await fetch(FORMSPREE_ENDPOINT, {
-          method: "POST",
-          headers: { "Accept": "application/json", "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-
-        if (res.ok) {
-          window.location.href = "/thanks.html";
-        } else {
-          msg.textContent = "Gönderim sırasında bir sorun oluştu. Lütfen tekrar dene.";
-          btn.disabled = false;
-        }
-      } catch (err) {
-        msg.textContent = "Bağlantı hatası. Birazdan tekrar dene.";
-        btn.disabled = false;
+      function setBusy(b) {
+        btn.disabled = b;
+        btn.textContent = b ? "Gönderiliyor..." : "Gönder";
       }
-    });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // bot kontrol
+        if (hp.value && hp.value.trim() !== "") {
+          msg.textContent = "İşlem engellendi.";
+          return;
+        }
+
+        // HTML5 doğrulama
+        if (!form.checkValidity()) {
+          msg.textContent = "Lütfen tüm alanları doldurun.";
+          form.reportValidity();
+          return;
+        }
+
+        setBusy(true);
+        msg.textContent = "";
+
+        try {
+          const payload = {
+            name:  document.getElementById("name").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            dream: document.getElementById("dream").value.trim(),
+            page:  location.pathname
+          };
+
+          const res = await fetch(FORMSPREE_ENDPOINT, {
+            method: "POST",
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) {
+            window.location.href = "/thanks.html";
+          } else {
+            const data = await res.json().catch(()=> ({}));
+            msg.textContent = data?.error || "Gönderim sırasında bir sorun oldu. Tekrar deneyin.";
+          }
+        } catch (err) {
+          msg.textContent = "Bağlantı hatası. Lütfen tekrar deneyin.";
+        } finally {
+          setBusy(false);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
