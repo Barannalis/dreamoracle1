@@ -1,57 +1,68 @@
 // api/send-email.js
+// DreamOracle → Vercel → Google Apps Script → Gmail
+// Bu endpoint sadece POST kabul eder.
 
 export default async function handler(req, res) {
-  // 1) Sadece POST kabul et
+  // 1) Sadece POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // 2) Gelen veriyi al
-  const { name, email, paket, oncelik, mesaj } = req.body || {};
-
-  if (!email) {
-    return res.status(400).json({ error: "E-posta gerekli" });
-  }
-
-  // 3) Google Apps Script endpoint'in
+  // 2) Senin ekran görüntüsünden aldığım URL
+  // Versiyon: "Version 3 on 2 Nov 2025, 14:11"
+  // Distribution ID: AKfycbxuwUidlLLCbYgm1vmhdr-tS2gQ19U-yS6VKbHljrYFPBJiw23zAqQ0lGCdHFeDrILq5Vg
   const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbyRvs6oBpNo6jJGunSokN_0pi4gROdelaSjtln2Chenlk5p_C4nhLIt75UJ3CWb8hqY2Q/exec";
+    "https://script.google.com/macros/s/AKfycbxuwUidlLLCbYgm1vmhdr-tS2gQ19U-yS6VKbHljrYFPBJiw23zAqQ0lGCdHFeDrILq5Vg/exec";
+
+  // 3) İstekten gelen verileri al
+  const { name, email, paket, oncelik, mesaj, source } = req.body || {};
 
   try {
-    // 4) Script'e POST at
+    // 4) Google Apps Script'e POST at
     const gsRes = await fetch(SCRIPT_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      // Google Script'e gidecek body
       body: JSON.stringify({
-        name,
-        email,
-        paket,
-        oncelik,
-        mesaj,
-        source: "dreamoracle.site",
+        name: name || "",
+        email: email || "",
+        paket: paket || "",
+        oncelik: oncelik || "",
+        mesaj: mesaj || "",
+        source: source || "dreamoracle.space",
+        distId:
+          "AKfycbxuwUidlLLCbYgm1vmhdr-tS2gQ19U-yS6VKbHljrYFPBJiw23zAqQ0lGCdHFeDrILq5Vg",
       }),
     });
 
-    // Google Script çoğu zaman text döner, JSON değil
-    const text = await gsRes.text();
+    // 5) Script'in cevabını oku
+    const data = await gsRes.json().catch(() => ({}));
 
-    if (!gsRes.ok) {
-      return res
-        .status(500)
-        .json({ error: "Script yanıt vermedi", detail: text });
+    if (gsRes.ok) {
+      // Google "ok" döndüyse biz de ok döneriz
+      return res.status(200).json({
+        ok: true,
+        from: "vercel",
+        relay: "google-script",
+        gsOk: true,
+        gsData: data,
+      });
+    } else {
+      // Google hata dönerse
+      return res.status(500).json({
+        ok: false,
+        message: "Google Apps Script hata döndürdü",
+        status: gsRes.status,
+        gsData: data,
+      });
     }
-
-    // 5) Frontend'e success dön
-    return res.status(200).json({
-      ok: true,
-      message: "Mail kuyruğa alındı",
-      scriptResponse: text,
-    });
   } catch (err) {
-    console.error("send-email error:", err);
-    return res.status(500).json({ error: "Sunucu hatası", detail: String(err) });
+    // 6) Sunucu tarafı hata
+    return res.status(500).json({
+      ok: false,
+      message: "Sunucu hatası veya Script'e ulaşılamadı",
+      error: err.toString(),
+    });
   }
 }
