@@ -1,125 +1,49 @@
-<!doctype html>
-<html lang="tr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rüyanı Gönder – DreamOracle</title>
-  <link rel="icon" href="/favicon.ico">
-  <style>
-    :root { color-scheme: dark; }
-    body{margin:0;background:#0b1220;color:#e7eef8;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue","Apple Color Emoji","Segoe UI Emoji",sans-serif}
-    .container{max-width:900px;margin:40px auto;padding:0 16px}
-    .card{background:linear-gradient(180deg,#0f1a2b 0%,#0b1220 100%);border:1px solid #1b2a45;border-radius:14px;padding:24px 24px 8px 24px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
-    .row{display:grid;gap:14px}
-    .back{color:#8fa7cf;text-decoration:none}
-    label{font-size:14px;color:#9fb3d9}
-    input,textarea{width:100%;background:#0b1426;border:1px solid #223455;border-radius:10px;color:#eaf1fb;padding:12px 12px;font-size:15px;outline:none}
-    input:focus,textarea:focus{border-color:#3f7bd9;box-shadow:0 0 0 3px rgba(63,123,217,.2)}
-    textarea{min-height:180px;resize:vertical}
-    .actions{display:flex;gap:10px;align-items:center;margin:8px 0 10px}
-    .btn{background:#2d66d7;border:none;border-radius:11px;padding:10px 16px;color:white;font-weight:600;cursor:pointer}
-    .btn[disabled]{opacity:.6;cursor:wait}
-    .muted{color:#8fa7cf;font-size:13px}
-    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-    .brand{font-weight:700;font-size:16px;color:#d7e6ff}
-    .error{color:#ff9b9b}
-    .ok{color:#78f1b6}
-  </style>
-</head>
-<body>
-  <div class="container">
-    <a href="/" class="back">← Anasayfa</a>
+<form id="dreamForm">
+  <input type="text" name="name" placeholder="Ad Soyad" required />
+  <input type="email" name="email" placeholder="E-posta" required />
+  <textarea name="message" placeholder="Rüyanız" rows="6" required></textarea>
 
-    <div class="card">
-      <div class="header">
-        <h1>Rüyanı Gönder</h1>
-        <div class="brand">DreamOracle</div>
-      </div>
-      <p class="muted">Formu doldur; e-postana dönüş yapalım.</p>
+  <!-- honeypot -->
+  <input type="text" name="_honey" autocomplete="off" tabindex="-1" style="display:none">
 
-      <!-- UYARI: Aşağıdaki action tam olarak sizin Apps Script Web App URL'iniz -->
-      <form id="dreamForm" method="POST"
-            action="https://script.google.com/macros/s/AKfycbyRvs6oBpNo6jJGunSokN_0pi4gROdelaSjtln2Chenlk5p_C4nhLIt75UJ3CWb8hqY2Q/exec"
-            class="row" novalidate>
-        <!-- Anti-bot (honeypot) -->
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+  <button id="sendBtn" type="submit">Gönder</button>
+  <p id="formMsg" style="margin-top:10px"></p>
+</form>
 
-        <!-- Kullanıcı alanları -->
-        <div>
-          <label for="name">Ad Soyad</label>
-          <input id="name" name="name" type="text" placeholder="Ali Baran Üzümcü" required />
-        </div>
-        <div>
-          <label for="email">E-posta</label>
-          <input id="email" name="email" type="email" placeholder="mail@ornekkullanici.com" required />
-        </div>
-        <div>
-          <label for="dream">Rüyanız</label>
-          <textarea id="dream" name="dream" placeholder="Rüyanızı buraya yazın..." required></textarea>
-        </div>
+<script>
+  const form = document.getElementById('dreamForm');
+  const btn = document.getElementById('sendBtn');
+  const msg = document.getElementById('formMsg');
 
-        <!-- Ek bilgiler -->
-        <input type="hidden" name="page" value="/contact.html" />
-        <!-- İstersen teşekkür sayfasını Apps Script'e ilet: -->
-        <input type="hidden" name="redirect" value="https://dreamoracle1.vercel.app/thanks.html" />
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.textContent = '';
+    btn.disabled = true; btn.textContent = 'Gönderiliyor…';
 
-        <div class="actions">
-          <button id="sendBtn" class="btn" type="submit">Gönder</button>
-          <span id="status" class="muted"></span>
-        </div>
-      </form>
-    </div>
-  </div>
+    const fd = new FormData(form);
+    const payload = {
+      name: fd.get('name'),
+      email: fd.get('email'),
+      message: fd.get('message'),
+      _honey: fd.get('_honey') || ''
+    };
 
-  <script>
-    (function () {
-      const form = document.getElementById('dreamForm');
-      const btn  = document.getElementById('sendBtn');
-      const st   = document.getElementById('status');
-
-      function setStatus(text, ok) {
-        st.textContent = text || '';
-        st.className = 'muted ' + (ok === true ? 'ok' : ok === false ? 'error' : '');
-      }
-
-      form.addEventListener('submit', function (e) {
-        // Klasik form post (action'a gider) yerine fetch ile arka planda gönderip
-        // başarılıysa thanks.html'e alıyoruz. (CORS Apps Script tarafından desteklenir.)
-        e.preventDefault();
-
-        // Honeypot doluysa bot kabul edip sessizce bitir
-        if (form._honey && form._honey.value.trim() !== '') {
-          return;
-        }
-
-        // Basit doğrulama
-        if (!form.name.value.trim() || !form.email.value.trim() || !form.dream.value.trim()) {
-          setStatus('Lütfen tüm alanları doldurun.', false);
-          return;
-        }
-
-        btn.disabled = true;
-        setStatus('Gönderiliyor…');
-
-        const url = form.getAttribute('action');
-        const data = new FormData(form);
-
-        fetch(url, { method: 'POST', body: data })
-          .then(async (res) => {
-            // Apps Script genelde 200 döndürür; düz metin/JSON olabilir.
-            if (!res.ok) throw new Error('Sunucu hatası: ' + res.status);
-            // Redirect alanı varsa oraya yönlendir.
-            const to = form.querySelector('input[name="redirect"]')?.value;
-            if (to) window.location.href = to;
-            else setStatus('Gönderildi!', true);
-          })
-          .catch((err) => {
-            console.error(err);
-            setStatus('Bağlantı hatası. Lütfen tekrar deneyin.', false);
-            btn.disabled = false;
-          });
+    try {
+      const r = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
-    })();
-  </script>
-</body>
-</html>
+      const j = await r.json();
+      if (j.ok) {
+        window.location.href = '/thanks.html';
+      } else {
+        msg.textContent = 'Bağlantı hatası. Lütfen tekrar deneyin.';
+      }
+    } catch (err) {
+      msg.textContent = 'Bağlantı hatası. Lütfen tekrar deneyin.';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Gönder';
+    }
+  });
+</script>
