@@ -47,3 +47,31 @@
     }
   });
 </script>
+<script>
+  const form = document.querySelector('form');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fd = new FormData(form);
+    const payload = {
+      name: fd.get('name'),
+      email: fd.get('email'),
+      message: fd.get('message'),
+    };
+
+    const res = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.ok) {
+      alert('Gönderildi ✅');
+      form.reset();
+    } else {
+      alert('Gönderilemedi ❌');
+    }
+  });
+</script>
+
