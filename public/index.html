@@ -2,61 +2,97 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DreamOracle – AI Rüya Yorumcusu & Yaşam Koçu</title>
-  <meta name="description" content="Rüyalarını yaz, 24 saat içinde akıllı yorum & pratik yönlendirme al. Premium paketle koçluk desteği.">
-  <link rel="stylesheet" href="/assets/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DreamOracle – Rüyalarından Anlam Çıkar</title>
+  <meta name="description" content="Rüyalarını yaz, 24 saat içinde e-posta kutuna yorum gelsin. İstersen Premium yorum + yaşam koçluğu." />
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <nav class="nav">
-    <div class="container inner">
-      <div class="logo"><span class="logo-badge"></span> DreamOracle</div>
-      <div class="small">
-        <a data-nav href="/index.html" class="btn">Anasayfa</a>
-        <a data-nav href="/premium.html" class="btn">Premium</a>
-        <a data-nav href="/faq.html" class="btn">SSS</a>
-        <a data-nav href="/contact.html" class="btn">İletişim</a>
-      </div>
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="/">DreamOracle</a>
+      <nav class="menu">
+        <a href="/">Anasayfa</a>
+        <a href="/premium.html">Premium</a>
+        <a href="/contact.html" class="btn btn-primary">İletişim</a>
+      </nav>
     </div>
-  </nav>
-
-  <header class="container hero">
-    <p class="kicker">AI Rüya Yorumcusu & Kişisel Rehber</p>
-    <h1 class="h1">Rüyalarından anlam çıkar. Hızlı, güvenli, kişisel.</h1>
-    <p class="lead">
-      Rüyanı yaz, 24 saat içinde e-postana yorum gelsin. İstersen Premium ile
-      rüyadaki temaları günlük hayat hedeflerinle eşleştirip “bugün ne yapmalıyım?” sorusuna pratik cevap al.
-    </p>
-    <p style="margin-top:18px;display:flex;gap:10px;">
-      <a class="btn-primary" href="/contact.html">Hemen rüya gönder →</a>
-      <a class="btn" href="/premium.html">Premium paketleri gör</a>
-    </p>
   </header>
 
-  <section class="container grid grid-3">
-    <div class="card"><h3>✓ Hızlı dönüş</h3><p class="small">Form ulaştığında saat başı kontrolden geçer. 24 saat içinde yanıt.</p></div>
-    <div class="card"><h3>✓ Net, uygulanabilir</h3><p class="small">Sembolleri hedeflerinle eşleştirip bugün için küçük bir aksiyon listesi.</p></div>
-    <div class="card"><h3>✓ Güvenli</h3><p class="small">Verilerin yalnızca yanıt oluşturmak için kullanılır. Kayıt tutmuyız.</p></div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <h1>Rüyalarından anlam çıkar. <span class="accent">Hızlı, güvenli, kişisel.</span></h1>
+      <p class="lead">
+        Rüyanı yaz, 24 saat içinde e-postana yorum gelsin. İstersen Premium yorumla
+        rüyadaki temaları hedeflerinle eşleştirip “bugün ne yapmalıyım?” sorusuna net yanıt al.
+      </p>
+      <div class="cta">
+        <a href="/contact.html" class="btn btn-primary">Hemen rüya gönder →</a>
+        <a href="/thanks.html" class="btn btn-ghost">Örnek teşekkür sayfası</a>
+      </div>
+      <ul class="badges">
+        <li>✓ Hızlı dönüş (24 saat)</li>
+        <li>✓ Net, uygulanabilir yorum</li>
+        <li>✓ Verilerin gizlidir</li>
+      </ul>
+    </div>
+    <div class="hero-glow" aria-hidden="true"></div>
   </section>
 
-  <section class="container" style="margin-top:26px">
-    <div class="card">
-      <h3>Nasıl çalışır?</h3>
-      <ol class="list">
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="container grid">
+      <div class="card">
+        <h3>Hızlı Deploy</h3>
+        <p>
+          Dosyanı <code>public/</code> altına koy, anında canlı. Vercel’e otomatik dağıtım.
+        </p>
+      </div>
+      <div class="card">
+        <h3>İletişim</h3>
+        <p>
+          Form üzerinden güvenli iletim. Gmail/Apps Script ya da FormRelay ile e-posta.
+        </p>
+      </div>
+      <div class="card">
+        <h3>SEO</h3>
+        <p>
+          <code>robots.txt</code> ve <code>sitemap.xml</code> hazır. Hafif ve hızlı sayfalar.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="container">
+      <h2>Nasıl çalışır?</h2>
+      <ol class="steps">
         <li>Rüyanı <a href="/contact.html">formdan</a> gönder.</li>
-        <li>Gerekirse Premium paket seç.</li>
+        <li>İstersen Premium paketi seç.</li>
         <li>Yanıtların e-postana gelsin.</li>
       </ol>
     </div>
   </section>
 
+  <!-- FOOTER -->
   <footer class="footer">
-    <div class="container small">
-      © 2025 DreamOracle · <a href="/privacy.html">Gizlilik</a> · <a href="/terms.html">Şartlar</a> · <a href="/sitemap.xml">Site Haritası</a>
+    <div class="container footer-inner">
+      <small>© <span id="year"></span> DreamOracle</small>
+      <nav class="footer-menu">
+        <a href="/privacy.html">Gizlilik</a>
+        <a href="/terms.html">Şartlar</a>
+        <a href="/sitemap.xml" rel="nofollow">Site haritası</a>
+      </nav>
     </div>
   </footer>
 
-  <!-- küçük nav betiği -->
-  <script src="/assets/app.js"></script>
+  <script>
+    // Dinamik yıl
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
