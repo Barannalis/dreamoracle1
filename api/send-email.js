@@ -1,104 +1,63 @@
-// api/send-email.js
-export const config = { runtime: 'nodejs18.x' };
+// Vercel Node.js sunucusuz fonksiyon
+export const config = { runtime: 'nodejs' }; // <-- 'nodejs18.x' DEĞİL
 
-// ---- Basit IP rate limit (volatile) ----
-const WINDOW_MS = 10 * 60 * 1000; // 10 dk
-const MAX_REQ   = 5;              // 10 dk'da 5 istek
-const buckets = new Map();        // { ip: [timestamps...] }
+// Google Apps Script Web App URL'in:
+// Buraya kendi dağıtım URL’ini koy (https://script.google.com/macros/s/AKfyc.../exec)
+const GAS_URL = process.env.GAS_WEB_APP_URL || 'https://script.google.com/macros/s/AKfyc.../exec';
 
-function tooMany(ip) {
-  const now = Date.now();
-  const list = (buckets.get(ip) || []).filter(t => now - t < WINDOW_MS);
-  if (list.length >= MAX_REQ) return true;
-  list.push(now);
-  buckets.set(ip, list);
-  return false;
+// CORS için kendi domainini tanımla
+const ALLOWED_ORIGINS = [
+  'https://dreamoracle.space',
+  'https://www.dreamoracle.space',
+  'https://dreamoracle1.vercel.app',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+];
+
+function setCors(res, origin) {
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Max-Age', '86400');
 }
 
 export default async function handler(req, res) {
+  // CORS
+  const origin = req.headers.origin || '';
+  const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  setCors(res, allow);
+
+  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
   try {
-    if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Method not allowed' });
+    if (!GAS_URL || !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(GAS_URL)) {
+      return res.status(500).json({ error: 'GAS URL missing or invalid' });
     }
 
-    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || '0.0.0.0';
-    if (tooMany(ip)) {
-      return res.status(429).json({ error: 'Çok sık istek. Bir süre sonra tekrar dene.' });
-    }
-
-    const {
-      name = '',
-      email = '',
-      message = '',
-      priority = '',
-      pkg = '',
-      _honey = '',
-      cfToken = ''
-    } = req.body || {};
-
-    // Honeypot
-    if (_honey && _honey.trim() !== '') {
-      return res.status(200).json({ ok: true, note: 'honeypot bypass' });
-    }
-
-    // Basit alan doğrulaması
+    const { name, email, message, package: pkg, priority } = req.body || {};
     if (!name || !email || !message) {
-      return res.status(400).json({ error: 'Zorunlu alanlar eksik.' });
+      return res.status(400).json({ error: 'name, email, message zorunludur.' });
     }
 
-    // Turnstile doğrulama
-    const SECRET = process.env.TURNSTILE_SECRET_KEY || '';
-    if (!SECRET) {
-      return res.status(500).json({ error: 'Turnstile yapılandırması eksik.' });
-    }
+    const payload = { name, email, message, package: pkg, priority, ts: Date.now() };
 
-    const verifyResp = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        secret: SECRET,
-        response: cfToken || ''
-      })
-    });
-    const verifyData = await verifyResp.json().catch(() => ({}));
-    if (!verifyData.success) {
-      return res.status(400).json({ error: 'Bot doğrulaması başarısız.' });
-    }
-
-    // GAS webhook
-    const GAS_URL = process.env.GAS_WEBAPP_URL;
-    if (!GAS_URL) {
-      return res.status(500).json({ error: 'GAS_WEBAPP_URL tanımlı değil.' });
-    }
-
-    const payload = {
-      name, email, message, priority, pkg,
-      ip,
-      ts: new Date().toISOString(),
-      // autoresponder & sheet log için GAS tarafında kullanılacak bayraklar
-      meta: { autorespond: true, saveToSheet: true }
-    };
-
-    const r = await fetch(GAS_URL, {
+    const f = await fetch(GAS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      // Apps Script doPost JSON’u Body içinde bekliyor:
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      // Apps Script bazen redirect atabilir; takip et
+      redirect: 'follow'
     });
 
-    const data = await r.json().catch(async () => {
-      // bazı GAS dağıtımları text döndürür
-      const t = await r.text();
-      return { text: t };
-    });
-
-    if (!r.ok) {
-      return res.status(500).json({ error: data?.error || 'E-posta gönderilemedi.' });
+    const text = await f.text().catch(() => '');
+    if (!f.ok) {
+      return res.status(502).json({ error: 'GAS error', status: f.status, body: text });
     }
 
-    return res.status(200).json({ ok: true, data });
-
-  } catch (e) {
-    return res.status(500).json({ error: 'Sunucu hatası.' });
+    // GAS bazen plain text döner; JSON’a çevirmeye çalışma
+    return res.status(200).json({ ok: true, relay: 'gas', body: text });
+  } catch (err) {
+    return res.status(500).json({ error: 'server error', detail: String(err && err.message || err) });
   }
 }
