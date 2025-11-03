@@ -1,510 +1,239 @@
 <!doctype html>
 <html lang="tr">
-  <head>
-    <meta charset="utf-8" />
-    <title>Rüyanı Gönder | DreamOracle</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Rüyanı gönder, DreamOracle e-posta adresine düşsün. Premium yorum ve yaşam koçluğu seçenekleri."
-    />
-    <link rel="icon" href="/favicon.svg" />
-    <style>
-      :root {
-        --bg: #0f172a;
-        --card: rgba(15, 23, 42, 0.65);
-        --card-border: rgba(148, 163, 184, 0.15);
-        --text: #e2e8f0;
-        --muted: #94a3b8;
-        --primary: #38bdf8;
-        --primary-dark: #0ea5e9;
-        --danger: #f87171;
-        --success: #16a34a;
-        --radius: 16px;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DreamOracle — İletişim / Rüya Gönder</title>
+  <meta name="description" content="DreamOracle: Rüya yorumcusu ve kişisel yaşam koçluğu. Rüyanı gönder, e-posta kutuna yorum gelsin." />
+  <link rel="icon" href="/favicon.svg" />
 
-      * {
-        box-sizing: border-box;
-      }
+  <style>
+    :root{
+      --bg:#0b1220;        /* sayfa arka planı (koyu) */
+      --panel:#101a2b;     /* kart/panel rengi */
+      --muted:#8aa1c1;     /* ikincil metin */
+      --text:#e6eefc;      /* ana metin */
+      --brand:#58a6ff;     /* vurgu */
+      --ok:#1aa86b;        /* başarılı */
+      --err:#ff6b6b;       /* hata */
+      --panel-border:#1f2b42;
+      --panel-shadow:0 10px 30px rgba(0,0,0,.35);
+      --input:#0c1526;
+      --input-border:#2b3a58;
+      --input-focus:#2f74ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, #11203c 0%, transparent 60%) , var(--bg);
+      color:var(--text);
+    }
+    .container{max-width:1100px; margin:40px auto; padding:0 20px}
+    .header{
+      display:flex; align-items:center; gap:12px; margin-bottom:18px; opacity:.9;
+      font-weight:600; letter-spacing:.2px;
+    }
+    .logo{width:28px; height:28px; border-radius:7px; background:linear-gradient(135deg,#67b3ff,#6f7dff); display:inline-block}
+    .subtitle{color:var(--muted); font-weight:500; font-size:14px}
 
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: radial-gradient(circle at top, #1e293b 0%, #020617 60%, #020617 100%);
-        color: var(--text);
-        min-height: 100vh;
-      }
+    .grid{
+      display:grid; grid-template-columns: 1.2fr .8fr; gap:28px;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns: 1fr}
+    }
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
+    .card{
+      background:var(--panel);
+      border:1px solid var(--panel-border);
+      border-radius:16px;
+      padding:22px;
+      box-shadow:var(--panel-shadow);
+    }
+    h1{margin:0 0 14px; font-size:32px; letter-spacing:.2px}
+    p.lead{margin:0 0 18px; color:var(--muted)}
+    label{display:block; font-size:13px; color:#b9c7de; margin-bottom:8px}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+    @media (max-width:620px){ .row{grid-template-columns: 1fr} }
 
-      header {
-        padding: 18px 32px;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-        background: rgba(2, 6, 23, 0.5);
-        backdrop-filter: blur(22px);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+    input,select,textarea,button{
+      width:100%; border-radius:12px; border:1px solid var(--input-border);
+      background:var(--input); color:var(--text); outline:none; font-size:15px;
+    }
+    input,select{height:48px; padding:0 14px}
+    textarea{min-height:180px; padding:12px 14px; resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:var(--input-focus); box-shadow:0 0 0 3px rgba(47,116,255,.18)}
 
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
+    .hint{margin:6px 0 0; font-size:12px; color:var(--muted)}
 
-      .brand-icon {
-        width: 30px;
-        height: 30px;
-        border-radius: 10px;
-        background: radial-gradient(circle, #38bdf8, #0f172a);
-        display: grid;
-        place-items: center;
-        font-weight: 700;
-      }
+    .btn{
+      margin-top:14px; height:50px; border:none; cursor:pointer; font-weight:700; letter-spacing:.2px;
+      background:linear-gradient(180deg,#5ba6ff,#3c7fe8); color:#fff;
+      box-shadow:0 8px 20px rgba(60,127,232,.35);
+    }
+    .btn:hover{filter:brightness(1.05)}
+    .btn:active{transform:translateY(1px)}
 
-      .title-wrap {
-        display: flex;
-        flex-direction: column;
-        line-height: 1.1;
-      }
+    .aside h3{margin:0 0 8px}
+    .aside .badge{display:inline-block; background:#0e2a52; border:1px solid #27406a; color:#9ac0ff; font-size:12px; padding:4px 8px; border-radius:999px; margin-bottom:8px}
+    ul.perks{margin:10px 0 0 0; padding:0 0 0 20px; color:#c7d6ec}
+    ul.perks li{margin:8px 0}
 
-      .title-wrap small {
-        color: var(--muted);
-        font-size: 12px;
-      }
+    .alert{
+      display:none; margin-top:14px; border-radius:12px; padding:12px 14px; font-size:14px; border:1px solid transparent;
+    }
+    .alert.success{display:block; background:rgba(26,168,107,.12); border-color:#1aa86b; color:#8be0bd}
+    .alert.error{display:block; background:rgba(255,107,107,.12); border-color:#ff6b6b; color:#ffb4b4}
 
-      .back-link {
-        display: inline-flex;
-        gap: 8px;
-        align-items: center;
-        font-size: 13px;
-        color: var(--muted);
-      }
-
-      main {
-        max-width: 1100px;
-        margin: 32px auto 60px;
-        padding: 0 16px;
-      }
-
-      .form-shell {
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.35));
-        border: 1px solid var(--card-border);
-        border-radius: 24px;
-        padding: 28px 28px 24px;
-        display: grid;
-        grid-template-columns: 2fr 1.1fr;
-        gap: 26px;
-      }
-
-      .form-shell h1 {
-        font-size: clamp(1.5rem, 3vw, 1.9rem);
-        margin-bottom: 4px;
-      }
-
-      .form-shell p.lead {
-        color: var(--muted);
-        font-size: 0.9rem;
-        margin-bottom: 18px;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
-
-      label {
-        font-size: 0.75rem;
-        color: var(--muted);
-        margin-bottom: 4px;
-        display: block;
-      }
-
-      input,
-      textarea,
-      select {
-        width: 100%;
-        background: rgba(15, 23, 42, 0.12);
-        border: 1px solid rgba(148, 163, 184, 0.15);
-        border-radius: 10px;
-        padding: 12px 12px;
-        color: var(--text);
-        font-size: 0.9rem;
-        outline: none;
-        transition: border 0.15s ease, box-shadow 0.15s ease;
-      }
-
-      input:focus,
-      textarea:focus,
-      select:focus {
-        border: 1px solid rgba(56, 189, 248, 0.6);
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-      }
-
-      textarea {
-        min-height: 140px;
-        resize: vertical;
-      }
-
-      .two-col {
-        display: flex;
-        gap: 12px;
-      }
-
-      .two-col > div {
-        flex: 1;
-      }
-
-      button[type="submit"] {
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        color: #0f172a;
-        border: none;
-        border-radius: 999px;
-        padding: 11px 22px;
-        font-weight: 600;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        justify-content: center;
-      }
-
-      button[type="submit"]:disabled {
-        opacity: 0.5;
-        cursor: wait;
-      }
-
-      .right-panel {
-        background: radial-gradient(circle at top, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0));
-        border: 1px solid rgba(148, 163, 184, 0.08);
-        border-radius: 20px;
-        padding: 18px 18px 14px;
-        height: fit-content;
-      }
-
-      .right-panel h2 {
-        font-size: 1rem;
-        margin: 0 0 14px;
-      }
-
-      .perk {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 12px;
-      }
-
-      .perk-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: 999px;
-        background: rgba(56, 189, 248, 0.12);
-        display: grid;
-        place-items: center;
-        font-size: 13px;
-      }
-
-      .badge {
-        display: inline-block;
-        background: rgba(22, 163, 74, 0.12);
-        color: #bbf7d0;
-        font-size: 11px;
-        padding: 3px 10px 4px;
-        border-radius: 999px;
-        margin-bottom: 6px;
-      }
-
-      .status {
-        font-size: 0.8rem;
-        margin-top: 10px;
-        padding: 9px 10px;
-        border-radius: 9px;
-        background: rgba(15, 23, 42, 0.3);
-        border: 1px solid rgba(148, 163, 184, 0.1);
-      }
-
-      .status.error {
-        border-color: rgba(248, 113, 113, 0.4);
-        background: rgba(248, 113, 113, 0.04);
-        color: #fecaca;
-      }
-
-      .status.ok {
-        border-color: rgba(22, 163, 74, 0.4);
-        background: rgba(22, 163, 74, 0.04);
-        color: #dcfce7;
-      }
-
-      footer {
-        text-align: center;
-        padding: 40px 0 30px;
-        font-size: 0.7rem;
-        color: rgba(148, 163, 184, 0.5);
-      }
-
-      @media (max-width: 900px) {
-        .form-shell {
-          grid-template-columns: 1fr;
-        }
-        .two-col {
-          flex-direction: column;
-        }
-      }
-
-      @media (max-width: 520px) {
-        header {
-          flex-direction: column;
-          gap: 10px;
-          align-items: flex-start;
-        }
-        .form-shell {
-          padding: 20px 16px 16px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <div class="brand">
-        <div class="brand-icon">D</div>
-        <div class="title-wrap">
-          <strong>DreamOracle</strong>
-          <small>AI Rüya Yorumcusu &amp; Kişisel Rehber</small>
-        </div>
+    .footnote{margin-top:16px; color:#9db0cc; font-size:12px}
+    a.link{color:#8cbcff; text-underline-offset:3px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <span class="logo" aria-hidden="true"></span>
+      <div>
+        <div>DreamOracle</div>
+        <div class="subtitle">AI Rüya Yorumcusu & Kişisel Rehber</div>
       </div>
-      <a class="back-link" href="/index.html">← Anasayfa</a>
-    </header>
+    </div>
 
-    <main>
-      <div class="form-shell">
-        <!-- SOL: FORM -->
-        <div>
-          <h1>Rüyanı Gönder</h1>
-          <p class="lead">
-            Formu doldur, e-posta kutuna yanıt gelsin. İstersen “Premium Yorum” seç → daha detaylı, yaşam koçluğu
-            bağlamında yorumlansın.
-          </p>
+    <div class="grid">
+      <!-- LEFT: FORM -->
+      <section class="card">
+        <h1>Rüyanı Gönder</h1>
+        <p class="lead">
+          Formu doldur, e-posta kutuna yanıt gelsin. İstersen “Premium Yorum” seç → daha detaylı, yaşam koçluğu bağlamında yorumlansın.
+        </p>
 
-          <form id="dreamForm">
-            <div class="two-col">
-              <div>
-                <label for="name">Ad Soyad</label>
-                <input id="name" name="name" type="text" placeholder="Ali Baran Üzümcü" required />
-              </div>
-              <div>
-                <label for="email">E-posta</label>
-                <input id="email" name="email" type="email" placeholder="ornek@mail.com" required />
-              </div>
-            </div>
-
-            <div class="two-col">
-              <div>
-                <label for="plan">Paket</label>
-                <select id="plan" name="plan">
-                  <option value="standart">Standart Rüya Yorumu (ücretsiz)</option>
-                  <option value="premium">Premium Rüya + Yaşam Koçluğu yorumu</option>
-                  <option value="iliski">İlişki / ruh eşi perspektifinden yorum</option>
-                </select>
-              </div>
-              <div>
-                <label for="topic">Öncelik</label>
-                <select id="topic" name="topic">
-                  <option value="genel">Genel yorum</option>
-                  <option value="is">İş / Para</option>
-                  <option value="aile">Aile / Ev</option>
-                  <option value="iliski">İlişki / Aşk</option>
-                  <option value="manevi">Manevi mesaj</option>
-                </select>
-              </div>
-            </div>
-
+        <form id="dream-form" novalidate>
+          <div class="row">
             <div>
-              <label for="message">Rüyanız</label>
-              <textarea
-                id="message"
-                name="message"
-                placeholder="Rüyanı mümkün olduğunca detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…"
-                required
-              ></textarea>
+              <label for="name">Ad Soyad</label>
+              <input id="name" name="name" type="text" placeholder="Ad Soyad" autocomplete="name" />
             </div>
+            <div>
+              <label for="email">E-posta</label>
+              <input id="email" name="email" type="email" placeholder="ornek@mail.com" autocomplete="email" required />
+            </div>
+          </div>
 
-            <button type="submit" id="submitBtn">
-              Gönder
-              <span aria-hidden="true">→</span>
-            </button>
+          <div class="row" style="margin-top:14px">
+            <div>
+              <label for="paket">Paket</label>
+              <select id="paket" name="paket">
+                <option value="Standart">Standart Rüya Yorumu (ücretsiz)</option>
+                <option value="Premium">Premium Yorum + Koçluk</option>
+              </select>
+            </div>
+            <div>
+              <label for="oncelik">Öncelik</label>
+              <select id="oncelik" name="oncelik">
+                <option value="Genel yorum">Genel yorum</option>
+                <option value="İş/para">İş / para</option>
+                <option value="Aşk/ilişki">Aşk / ilişki</option>
+                <option value="Aile">Aile</option>
+                <option value="Kariyer">Kariyer</option>
+              </select>
+            </div>
+          </div>
 
-            <div id="formStatus" class="status" style="display: none"></div>
-          </form>
+          <div style="margin-top:14px">
+            <label for="mesaj">Rüyanız</label>
+            <textarea id="mesaj" name="mesaj" placeholder="Rüyanı mümkün olduğunca detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…"></textarea>
+            <div class="hint">Paylaşılan içerik gizlidir; public olarak gösterilmez.</div>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn">Gönder →</button>
+
+          <div id="form-alert" class="alert"></div>
+
+          <div class="footnote">
+            Form çalışmıyorsa <a class="link" href="mailto:uzumcu661@gmail.com">uzumcu661@gmail.com</a> adresine manuel e-posta atabilirsin.
+          </div>
+        </form>
+      </section>
+
+      <!-- RIGHT: INFO -->
+      <aside class="card aside">
+        <span class="badge">Yeni</span>
+        <h3>Premium Yorum + Koçluk</h3>
+        <p class="lead" style="margin-bottom:10px">
+          Rüyandaki sembolleri günlük hayatınla eşleştirip aksiyon önerisi istiyorsan bu alanı seç.
+          Kısaca “şimdi ne yapmalıyım?” sorusuna cevap verir.
+        </p>
+
+        <ul class="perks">
+          <li><b>Terapi değil, yönlendirme.</b> Rüya → bilinçaltı → bugün ne yapacağım zinciri.</li>
+          <li><b>24 saat içinde cevap.</b> Form bize ulaştığında mail relay çalışır (Gmail / Script).</li>
+          <li><b>Koruma / enerji yorumu.</b> İstersen eklenecek modül.</li>
+        </ul>
+
+        <div class="alert error" style="margin-top:18px">
+          API şu anda GET kabul etmiyor ama sorun değil, POST ile göndereceğiz.
         </div>
+      </aside>
+    </div>
+  </div>
 
-        <!-- SAĞ: BİLGİ / PREMIUM -->
-        <div class="right-panel">
-          <span class="badge">Yeni</span>
-          <h2>Premium Yorum + Koçluk</h2>
-          <p style="color: var(--muted); font-size: 0.8rem; line-height: 1.5">
-            Rüyandaki sembolleri günlük hayatınla eşleştirip aksiyon önerisi istiyorsan bu alanı seç. Kısaca “şimdi ne
-            yapmalıyım?” sorusuna cevap verir.
-          </p>
-
-          <div class="perk">
-            <div class="perk-icon">✦</div>
-            <div>
-              <strong>Terapi değil, yönlendirme.</strong>
-              <div style="color: var(--muted); font-size: 0.73rem">Rüya → bilinçaltı → bugün ne yapacağım zinciri.</div>
-            </div>
-          </div>
-
-          <div class="perk">
-            <div class="perk-icon">⏱</div>
-            <div>
-              <strong>24 saat içinde cevap.</strong>
-              <div style="color: var(--muted); font-size: 0.73rem">
-                Form bize ulaştığında mail relay çalışır (Gmail / Script).
-              </div>
-            </div>
-          </div>
-
-          <div class="perk">
-            <div class="perk-icon">🧿</div>
-            <div>
-              <strong>Koruma / enerji yorumu.</strong>
-              <div style="color: var(--muted); font-size: 0.73rem">İstenirse eklenecek modül.</div>
-            </div>
-          </div>
-
-          <div id="apiStatus" class="status" style="margin-top: 16px">
-            API: <strong>dreamoracle1.vercel.app</strong> üzerinden gönderilecek.
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <footer>© 2025 DreamOracle · İletişim</footer>
-
-    <script>
-      // burayı senin çalışan endpoint'ine bağlıyoruz
-      const API_URL = "https://dreamoracle1.vercel.app/api/send-email";
-      // domain tam oturduğunda bunu buna çevir: "https://dreamoracle.space/api/send-email"
-
-      const form = document.getElementById("dreamForm");
-      const statusBox = document.getElementById("formStatus");
-      const submitBtn = document.getElementById("submitBtn");
-      const apiStatus = document.getElementById("apiStatus");
-
-      // sayfa açıldığında API canlı mı diye HEAD/GET ile yoklayabiliriz (görünmez)
-      (async () => {
-        try {
-          const r = await fetch(API_URL, { method: "GET" });
-          if (r.ok === false) throw new Error("not ok");
-          apiStatus.classList.add("ok");
-          apiStatus.innerText = "API bağlı: " + API_URL;
-        } catch (err) {
-          apiStatus.classList.add("error");
-          apiStatus.innerText = "API şu anda GET kabul etmiyor ama sorun değil, POST ile göndereceğiz.";
-        }
-      })();
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        statusBox.style.display = "none";
-
-        const payload = {
-          name: form.name.value.trim(),
-          email: form.email.value.trim(),
-          message: form.message.value.trim(),
-          plan: form.plan.value,
-          topic: form.topic.value,
-          source: "dreamoracle-contact-form"
-        };
-
-        if (!payload.name || !payload.email || !payload.message) {
-          showStatus("Lütfen tüm alanları doldur.", true);
-          return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Gönderiliyor...";
-
-        try {
-          const res = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-          });
-
-          if (res.ok) {
-            showStatus("Rüyan ulaştı. E-postanı kontrol edebilirsin. 👍", false);
-            form.reset();
-            // thanks sayfan varsa:
-            // window.location.href = "/thanks.html";
-          } else {
-            const data = await res.json().catch(() => ({}));
-            showStatus("Sunucu cevap vermedi: " + (data.error || res.status), true);
-          }
-        } catch (err) {
-          showStatus("Bağlantı hatası. Biraz sonra tekrar dene.", true);
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.innerText = "Gönder →";
-        }
-      });
-
-      function showStatus(msg, isError) {
-        statusBox.style.display = "block";
-        statusBox.textContent = msg;
-        statusBox.classList.remove("error", "ok");
-        statusBox.classList.add(isError ? "error" : "ok");
-      }
-    </script>
+  <script>
     const form = document.getElementById("dream-form");
-    const statusBox = document.getElementById("form-status");
+    const alertBox = document.getElementById("form-alert");
+    const btn = document.getElementById("submitBtn");
 
-    form.addEventListener("submit", async function (e) {
+    function showAlert(type, msg){
+      alertBox.style.display = "block";
+      alertBox.className = "alert " + (type === "ok" ? "success" : "error");
+      alertBox.textContent = msg;
+    }
+
+    form.addEventListener("submit", async function(e){
       e.preventDefault();
+      showAlert("ok", "Gönderiliyor… lütfen bekle.");
+      btn.disabled = true;
+      btn.style.opacity = .7;
 
-      const formData = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        paket: document.getElementById("paket").value,
-        oncelik: document.getElementById("oncelik").value,
-        mesaj: document.getElementById("message").value,
-      };
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const paket = document.getElementById("paket").value;
+      const oncelik = document.getElementById("oncelik").value;
+      const mesaj = document.getElementById("mesaj").value.trim();
 
-      statusBox.textContent = "Gönderiliyor...";
-      statusBox.style.color = "#fff";
+      if(!email){
+        showAlert("err","E-posta zorunlu alan.");
+        btn.disabled = false; btn.style.opacity = 1; return;
+      }
 
-      try {
-        const res = await fetch("/api/send-email", {
+      try{
+        const resp = await fetch("/api/send-email", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ name, email, paket, oncelik, mesaj })
         });
 
-        const data = await res.json();
+        const data = await resp.json();
 
-        if (res.ok) {
-          statusBox.textContent = "Rüyan ulaştı ✨ E-postanı kontrol et.";
+        // Bu API debugging modunda; 200 dönse bile 'ok' alanına bakıyoruz.
+        if (data && data.ok) {
+          showAlert("ok", "Rüyan ulaştı. E-postanı kontrol edebilirsin. 👍");
           form.reset();
         } else {
-          statusBox.textContent =
-            "Sunucu hata verdi: " + (data.error || "Bilinmeyen hata");
-          statusBox.style.color = "#ffb4b4";
+          // Konsola tüm detayı bas → bize screenshot/JSON gönderebilirsin
+          console.log("DEBUG /api/send-email response:", data);
+          const detail =
+            (data && (data.reason || data.scriptStatus || data.fetchError)) ?
+              ` (detay: ${data.reason || data.scriptStatus || data.fetchError})` : "";
+          showAlert("err", "Sunucu cevap verdi ama mail gitmedi" + detail + ". Konsolu kontrol et.");
         }
-      } catch (err) {
-        statusBox.textContent = "Bağlantı kurulamadı. Bir daha dener misin?";
-        statusBox.style.color = "#ffb4b4";
+      }catch(err){
+        showAlert("err", "İstek sırasında hata: " + err);
+      }finally{
+        btn.disabled = false;
+        btn.style.opacity = 1;
       }
     });
   </script>
 </body>
-</html>
-  </body>
 </html>
