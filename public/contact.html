@@ -1,177 +1,75 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DreamOracle — Rüyanı Gönder</title>
-  <meta name="description" content="Rüyanı gönder; e-posta kutuna yorum olarak gelsin. İstersen Premium Yorum + Koçluk." />
-  <link rel="icon" href="/favicon.svg" />
-
-  <!-- Basit stiller -->
-  <style>
-    :root{--bg:#0a1020;--card:#0f1630;--muted:#8ea0b5;--txt:#e8eefb;--pri:#2eaadc;--ok:#2ecc71;--err:#ff6b6b}
-    html,body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    .wrap{max-width:1100px;margin:48px auto;padding:0 20px}
-    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px}
-    .card{background:linear-gradient(180deg,#0f1630,#101735);border:1px solid #1a244a;border-radius:16px;padding:22px 22px}
-    h1{margin:6px 0 16px;font-size:32px}
-    label{font-size:13px;color:var(--muted);display:block;margin:14px 0 6px}
-    input,select,textarea{width:100%;box-sizing:border-box;background:#0b132a;border:1px solid #1a244a;color:var(--txt);
-      border-radius:10px;padding:12px 14px;outline:none;font-size:14px}
-    textarea{min-height:160px;resize:vertical}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .btn{width:100%;margin-top:16px;background:var(--pri);border:none;border-radius:12px;color:#03101a;padding:14px 16px;
-      font-weight:700;font-size:15px;cursor:pointer}
-    .btn[disabled]{opacity:.6;cursor:not-allowed}
-    .note{font-size:12px;color:var(--muted);margin-top:6px}
-    .tip{background:#0c132c;border:1px dashed #2a3866;border-radius:12px;padding:14px 14px;margin-top:14px;color:#b9c7de}
-    .badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#10213d;border:1px solid #23386b;
-      color:#9ac8ff;font-size:12px;margin-bottom:8px}
-    .alert{margin-top:14px;border-radius:12px;padding:12px 14px;font-size:14px;border:1px solid #223055}
-    .alert.ok{background:rgba(46,204,113,.08);border-color:#2ecc71;color:#abf7c5}
-    .alert.err{background:rgba(255,107,107,.08);border-color:#ff6b6b;color:#ffc6c6}
-    .hidden{display:none}
-  </style>
-
-  <!-- Cloudflare Turnstile -->
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rüyanı Gönder – DreamOracle</title>
+  <link rel="stylesheet" href="/assets/style.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="grid">
-      <form id="dreamForm" class="card" autocomplete="off" novalidate>
-        <h1>Rüyanı Gönder</h1>
-        <p class="note">Formu doldur; e-posta kutuna yanıt gelsin. İstersen “Premium Yorum + Koçluk” seçeneğiyle daha detaylı ve
-          yönlendirmeli yorum alabilirsin.</p>
-
-        <!-- HONEYPOT (botlar için) -->
-        <input type="text" name="_honey" id="_honey" style="display:none" tabindex="-1" autocomplete="off" />
-
-        <div class="row">
-          <div>
-            <label for="name">Ad Soyad</label>
-            <input id="name" name="name" placeholder="Adın Soyadın" required />
-          </div>
-          <div>
-            <label for="email">E-posta</label>
-            <input id="email" name="email" type="email" placeholder="ornek@mail.com" required />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label for="package">Paket</label>
-            <select id="package" name="package">
-              <option value="free">Standart Rüya Yorumu (ücretsiz)</option>
-              <option value="premium">Premium Yorum + Koçluk</option>
-            </select>
-          </div>
-          <div>
-            <label for="priority">Öncelik</label>
-            <select id="priority" name="priority">
-              <option value="genel">Genel yorum</option>
-              <option value="iliski">İlişki / duygu</option>
-              <option value="is">İş / para</option>
-              <option value="ruhsal">Ruhsal süreç</option>
-            </select>
-          </div>
-        </div>
-
-        <label for="message">Rüyanız</label>
-        <textarea id="message" name="message" placeholder="Rüyanı mümkün olduğunca detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…"
-                  required></textarea>
-
-        <!-- Turnstile widget -->
-        <div style="margin-top:10px">
-          <!-- KENDİ site key’inle değiştir: -->
-          <div id="turnstile-widget" class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="dark"></div>
-        </div>
-
-        <button id="submitBtn" class="btn" type="submit">Gönder →</button>
-
-        <div id="msgOk" class="alert ok hidden">Rüyan ulaştı. E-postanı kontrol edebilirsin. ✨</div>
-        <div id="msgErr" class="alert err hidden"></div>
-
-        <p class="note">Gönder’e basarak <a href="/privacy.html">Aydınlatma Metni</a>’ni kabul edersin.</p>
-      </form>
-
-      <aside class="card">
-        <div class="badge">Yeni</div>
-        <h3 style="margin:6px 0 12px">Premium Yorum + Koçluk</h3>
-        <p class="note">Rüyandaki sembolleri günlük hayatınla eşleştirip aksiyon önerisi istiyorsan bu alanı seç. “Şimdi ne yapmalıyım?” sorusuna pratik yanıt.</p>
-        <ul class="note">
-          <li>Terapi değil, yönlendirme.</li>
-          <li>24 saat içinde cevap (mesai saatleri içinde).</li>
-          <li>İsterse koruma/enerji modülü (isteğe bağlı).</li>
-        </ul>
-        <div class="tip">API şu anda GET kabul etmiyor; form zaten POST ile gönderiyor. Sorun yok ✅</div>
-      </aside>
+  <nav class="nav"><div class="container inner">
+    <div class="logo"><span class="logo-badge"></span> DreamOracle</div>
+    <div class="small">
+      <a data-nav href="/index.html" class="btn">Anasayfa</a>
+      <a data-nav href="/premium.html" class="btn">Premium</a>
+      <a data-nav href="/faq.html" class="btn">SSS</a>
+      <a data-nav href="/contact.html" class="btn">İletişim</a>
     </div>
-  </div>
+  </div></nav>
 
-  <script>
-    (function () {
-      const form = document.getElementById('dreamForm');
-      const btn  = document.getElementById('submitBtn');
-      const ok   = document.getElementById('msgOk');
-      const err  = document.getElementById('msgErr');
+  <main class="container hero">
+    <h1 class="h1">Rüyanı Gönder</h1>
+    <p class="lead">Formu doldur; e-postana dönüş yapalım. İstersen “Premium” seç → daha detaylı, yaşam koçluğu bağlamında yorumlansın.</p>
 
-      const show = (el, text) => { if(text) el.textContent = text; el.classList.remove('hidden'); }
-      const hide = (el) => el.classList.add('hidden');
+    <form id="dreamForm" class="form" novalidate>
+      <div class="row row-2">
+        <div>
+          <label>Ad Soyad</label>
+          <input class="input" name="fullname" required placeholder="Ad Soyad" />
+        </div>
+        <div>
+          <label>E-posta</label>
+          <input class="input" name="email" type="email" required placeholder="ornek@mail.com" />
+        </div>
+      </div>
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        hide(ok); hide(err);
+      <div class="row row-2" style="margin-top:10px">
+        <div>
+          <label>Paket</label>
+          <select class="select" name="package">
+            <option>Standart Rüya Yorumu (ücretsiz)</option>
+            <option>Premium Yorum + Koçluk</option>
+          </select>
+        </div>
+        <div>
+          <label>Öncelik</label>
+          <select class="select" name="priority">
+            <option>Genel yorum</option>
+            <option>Duygusal tema</option>
+            <option>İş/para/karar</option>
+            <option>Korku/tekrar eden sembol</option>
+          </select>
+        </div>
+      </div>
 
-        // basit doğrulama
-        const name = form.name.value.trim();
-        const email = form.email.value.trim();
-        const message = form.message.value.trim();
-        const priority = form.priority.value;
-        const pkg = form.package.value;
-        const honey = document.getElementById('_honey').value;
+      <div style="margin-top:10px">
+        <label>Rüyanız</label>
+        <textarea class="textarea" name="message" rows="8" required
+          placeholder="Rüyanı mümkün olduğunca detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…"></textarea>
+        <p class="help">Kısa, uygulanabilir bir yanıt için lütfen net detaylar ekle.</p>
+      </div>
 
-        if (!name || !email || !message) {
-          show(err, 'Lütfen tüm alanları doldur.');
-          return;
-        }
+      <div style="margin-top:14px">
+        <button type="submit" class="btn-primary" style="width:100%">Gönder →</button>
+        <div id="info-ok" class="alert ok" style="display:none">Rüyan ulaştı. E-postanı kontrol edebilirsin. ✉️</div>
+        <div id="info-err" class="alert err small" style="display:none">Gönderilemedi.</div>
+      </div>
+    </form>
+  </main>
 
-        // Turnstile token
-        let token = '';
-        try {
-          token = window.turnstile && window.turnstile.getResponse
-            ? window.turnstile.getResponse(document.getElementById('turnstile-widget'))
-            : '';
-        } catch (_) { token = ''; }
+  <footer class="footer"><div class="container small">
+    © 2025 DreamOracle · <a href="/privacy.html">Gizlilik</a> · <a href="/terms.html">Şartlar</a>
+  </div></footer>
 
-        btn.disabled = true;
-
-        try {
-          const res = await fetch('/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, message, priority, pkg, _honey: honey, cfToken: token })
-          });
-
-          if (!res.ok) {
-            const data = await res.json().catch(() => ({}));
-            const msg = data?.error || `Sunucu cevap vermedi: ${res.status}`;
-            show(err, msg);
-            btn.disabled = false;
-            return;
-          }
-
-          // başarı
-          show(ok);
-          // 1–2 sn sonra teşekkür sayfasına da gidebilir:
-          setTimeout(() => { window.location.href = '/thanks.html?utm=contact'; }, 1200);
-
-        } catch (e) {
-          show(err, 'Bağlantı hatası. Lütfen tekrar deneyin.');
-          btn.disabled = false;
-        }
-      });
-    })();
-  </script>
+  <script src="/assets/app.js"></script>
 </body>
 </html>
