@@ -1,82 +1,104 @@
 // api/send-email.js
-// DreamOracle → Vercel → Google Apps Script mail relay
-// ÖNEMLİ: Bu sürüm HEP 200 döner ve sana Google'ın ne dediğini gösterir.
+export const config = { runtime: 'nodejs18.x' };
+
+// ---- Basit IP rate limit (volatile) ----
+const WINDOW_MS = 10 * 60 * 1000; // 10 dk
+const MAX_REQ   = 5;              // 10 dk'da 5 istek
+const buckets = new Map();        // { ip: [timestamps...] }
+
+function tooMany(ip) {
+  const now = Date.now();
+  const list = (buckets.get(ip) || []).filter(t => now - t < WINDOW_MS);
+  if (list.length >= MAX_REQ) return true;
+  list.push(now);
+  buckets.set(ip, list);
+  return false;
+}
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed", method: req.method });
-  }
-
-  // Senin son dağıttığın URL
-  const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxuwUidlLLCbYgm1vmhdr-tS2gQ19U-yS6VKbHljrYFPBJiw23zAqQ0lGCdHFeDrILq5Vg/exec";
-
-  const {
-    name,
-    email,
-    paket,
-    oncelik,
-    mesaj,
-    source = "dreamoracle.space",
-  } = req.body || {};
-
-  // Minimum kontrol
-  if (!email) {
-    return res.status(200).json({
-      ok: false,
-      reason: "email_not_provided",
-      message: "email gerekli",
-    });
-  }
-
-  let fetchError = null;
-  let gsRes = null;
-  let rawText = null;
-  let parsed = null;
-
   try {
-    gsRes = await fetch(SCRIPT_URL, {
-      method: "POST", // <-- Script POST kabul etmezse burada göreceğiz
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name || "",
-        email: email || "",
-        paket: paket || "",
-        oncelik: oncelik || "",
-        mesaj: mesaj || "",
-        source,
-        distId:
-          "AKfycbxuwUidlLLCbYgm1vmhdr-tS2gQ19U-yS6VKbHljrYFPBJiw23zAqQ0lGCdHFeDrILq5Vg",
-      }),
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || '0.0.0.0';
+    if (tooMany(ip)) {
+      return res.status(429).json({ error: 'Çok sık istek. Bir süre sonra tekrar dene.' });
+    }
+
+    const {
+      name = '',
+      email = '',
+      message = '',
+      priority = '',
+      pkg = '',
+      _honey = '',
+      cfToken = ''
+    } = req.body || {};
+
+    // Honeypot
+    if (_honey && _honey.trim() !== '') {
+      return res.status(200).json({ ok: true, note: 'honeypot bypass' });
+    }
+
+    // Basit alan doğrulaması
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: 'Zorunlu alanlar eksik.' });
+    }
+
+    // Turnstile doğrulama
+    const SECRET = process.env.TURNSTILE_SECRET_KEY || '';
+    if (!SECRET) {
+      return res.status(500).json({ error: 'Turnstile yapılandırması eksik.' });
+    }
+
+    const verifyResp = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        secret: SECRET,
+        response: cfToken || ''
+      })
+    });
+    const verifyData = await verifyResp.json().catch(() => ({}));
+    if (!verifyData.success) {
+      return res.status(400).json({ error: 'Bot doğrulaması başarısız.' });
+    }
+
+    // GAS webhook
+    const GAS_URL = process.env.GAS_WEBAPP_URL;
+    if (!GAS_URL) {
+      return res.status(500).json({ error: 'GAS_WEBAPP_URL tanımlı değil.' });
+    }
+
+    const payload = {
+      name, email, message, priority, pkg,
+      ip,
+      ts: new Date().toISOString(),
+      // autoresponder & sheet log için GAS tarafında kullanılacak bayraklar
+      meta: { autorespond: true, saveToSheet: true }
+    };
+
+    const r = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      // Apps Script doPost JSON’u Body içinde bekliyor:
+      body: JSON.stringify(payload)
     });
 
-    rawText = await gsRes.text();
+    const data = await r.json().catch(async () => {
+      // bazı GAS dağıtımları text döndürür
+      const t = await r.text();
+      return { text: t };
+    });
 
-    try {
-      parsed = JSON.parse(rawText);
-    } catch (e) {
-      parsed = { raw: rawText };
+    if (!r.ok) {
+      return res.status(500).json({ error: data?.error || 'E-posta gönderilemedi.' });
     }
-  } catch (err) {
-    fetchError = err.toString();
-  }
 
-  // BURADAN SONRA HİÇ 500 DÖNMEYECEĞİZ
-  return res.status(200).json({
-    ok: gsRes?.ok === true,
-    note: "Bu endpoint debugging modunda, o yüzden hep 200.",
-    requestBody: {
-      name,
-      email,
-      paket,
-      oncelik,
-      mesaj,
-    },
-    fetchError, // Vercel → Google hiç gidemedi mi?
-    scriptStatus: gsRes ? gsRes.status : null,
-    scriptUrl: SCRIPT_URL,
-    scriptResponse: parsed,
-  });
+    return res.status(200).json({ ok: true, data });
+
+  } catch (e) {
+    return res.status(500).json({ error: 'Sunucu hatası.' });
+  }
 }
