@@ -2,238 +2,176 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DreamOracle — İletişim / Rüya Gönder</title>
-  <meta name="description" content="DreamOracle: Rüya yorumcusu ve kişisel yaşam koçluğu. Rüyanı gönder, e-posta kutuna yorum gelsin." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DreamOracle — Rüyanı Gönder</title>
+  <meta name="description" content="Rüyanı gönder; e-posta kutuna yorum olarak gelsin. İstersen Premium Yorum + Koçluk." />
   <link rel="icon" href="/favicon.svg" />
 
+  <!-- Basit stiller -->
   <style>
-    :root{
-      --bg:#0b1220;        /* sayfa arka planı (koyu) */
-      --panel:#101a2b;     /* kart/panel rengi */
-      --muted:#8aa1c1;     /* ikincil metin */
-      --text:#e6eefc;      /* ana metin */
-      --brand:#58a6ff;     /* vurgu */
-      --ok:#1aa86b;        /* başarılı */
-      --err:#ff6b6b;       /* hata */
-      --panel-border:#1f2b42;
-      --panel-shadow:0 10px 30px rgba(0,0,0,.35);
-      --input:#0c1526;
-      --input-border:#2b3a58;
-      --input-focus:#2f74ff;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
-      background: radial-gradient(1200px 600px at 20% -10%, #11203c 0%, transparent 60%) , var(--bg);
-      color:var(--text);
-    }
-    .container{max-width:1100px; margin:40px auto; padding:0 20px}
-    .header{
-      display:flex; align-items:center; gap:12px; margin-bottom:18px; opacity:.9;
-      font-weight:600; letter-spacing:.2px;
-    }
-    .logo{width:28px; height:28px; border-radius:7px; background:linear-gradient(135deg,#67b3ff,#6f7dff); display:inline-block}
-    .subtitle{color:var(--muted); font-weight:500; font-size:14px}
-
-    .grid{
-      display:grid; grid-template-columns: 1.2fr .8fr; gap:28px;
-    }
-    @media (max-width: 920px){
-      .grid{grid-template-columns: 1fr}
-    }
-
-    .card{
-      background:var(--panel);
-      border:1px solid var(--panel-border);
-      border-radius:16px;
-      padding:22px;
-      box-shadow:var(--panel-shadow);
-    }
-    h1{margin:0 0 14px; font-size:32px; letter-spacing:.2px}
-    p.lead{margin:0 0 18px; color:var(--muted)}
-    label{display:block; font-size:13px; color:#b9c7de; margin-bottom:8px}
-    .row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-    @media (max-width:620px){ .row{grid-template-columns: 1fr} }
-
-    input,select,textarea,button{
-      width:100%; border-radius:12px; border:1px solid var(--input-border);
-      background:var(--input); color:var(--text); outline:none; font-size:15px;
-    }
-    input,select{height:48px; padding:0 14px}
-    textarea{min-height:180px; padding:12px 14px; resize:vertical}
-    input:focus,select:focus,textarea:focus{border-color:var(--input-focus); box-shadow:0 0 0 3px rgba(47,116,255,.18)}
-
-    .hint{margin:6px 0 0; font-size:12px; color:var(--muted)}
-
-    .btn{
-      margin-top:14px; height:50px; border:none; cursor:pointer; font-weight:700; letter-spacing:.2px;
-      background:linear-gradient(180deg,#5ba6ff,#3c7fe8); color:#fff;
-      box-shadow:0 8px 20px rgba(60,127,232,.35);
-    }
-    .btn:hover{filter:brightness(1.05)}
-    .btn:active{transform:translateY(1px)}
-
-    .aside h3{margin:0 0 8px}
-    .aside .badge{display:inline-block; background:#0e2a52; border:1px solid #27406a; color:#9ac0ff; font-size:12px; padding:4px 8px; border-radius:999px; margin-bottom:8px}
-    ul.perks{margin:10px 0 0 0; padding:0 0 0 20px; color:#c7d6ec}
-    ul.perks li{margin:8px 0}
-
-    .alert{
-      display:none; margin-top:14px; border-radius:12px; padding:12px 14px; font-size:14px; border:1px solid transparent;
-    }
-    .alert.success{display:block; background:rgba(26,168,107,.12); border-color:#1aa86b; color:#8be0bd}
-    .alert.error{display:block; background:rgba(255,107,107,.12); border-color:#ff6b6b; color:#ffb4b4}
-
-    .footnote{margin-top:16px; color:#9db0cc; font-size:12px}
-    a.link{color:#8cbcff; text-underline-offset:3px}
+    :root{--bg:#0a1020;--card:#0f1630;--muted:#8ea0b5;--txt:#e8eefb;--pri:#2eaadc;--ok:#2ecc71;--err:#ff6b6b}
+    html,body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:1100px;margin:48px auto;padding:0 20px}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px}
+    .card{background:linear-gradient(180deg,#0f1630,#101735);border:1px solid #1a244a;border-radius:16px;padding:22px 22px}
+    h1{margin:6px 0 16px;font-size:32px}
+    label{font-size:13px;color:var(--muted);display:block;margin:14px 0 6px}
+    input,select,textarea{width:100%;box-sizing:border-box;background:#0b132a;border:1px solid #1a244a;color:var(--txt);
+      border-radius:10px;padding:12px 14px;outline:none;font-size:14px}
+    textarea{min-height:160px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn{width:100%;margin-top:16px;background:var(--pri);border:none;border-radius:12px;color:#03101a;padding:14px 16px;
+      font-weight:700;font-size:15px;cursor:pointer}
+    .btn[disabled]{opacity:.6;cursor:not-allowed}
+    .note{font-size:12px;color:var(--muted);margin-top:6px}
+    .tip{background:#0c132c;border:1px dashed #2a3866;border-radius:12px;padding:14px 14px;margin-top:14px;color:#b9c7de}
+    .badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#10213d;border:1px solid #23386b;
+      color:#9ac8ff;font-size:12px;margin-bottom:8px}
+    .alert{margin-top:14px;border-radius:12px;padding:12px 14px;font-size:14px;border:1px solid #223055}
+    .alert.ok{background:rgba(46,204,113,.08);border-color:#2ecc71;color:#abf7c5}
+    .alert.err{background:rgba(255,107,107,.08);border-color:#ff6b6b;color:#ffc6c6}
+    .hidden{display:none}
   </style>
+
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <span class="logo" aria-hidden="true"></span>
-      <div>
-        <div>DreamOracle</div>
-        <div class="subtitle">AI Rüya Yorumcusu & Kişisel Rehber</div>
-      </div>
-    </div>
-
+  <div class="wrap">
     <div class="grid">
-      <!-- LEFT: FORM -->
-      <section class="card">
+      <form id="dreamForm" class="card" autocomplete="off" novalidate>
         <h1>Rüyanı Gönder</h1>
-        <p class="lead">
-          Formu doldur, e-posta kutuna yanıt gelsin. İstersen “Premium Yorum” seç → daha detaylı, yaşam koçluğu bağlamında yorumlansın.
-        </p>
+        <p class="note">Formu doldur; e-posta kutuna yanıt gelsin. İstersen “Premium Yorum + Koçluk” seçeneğiyle daha detaylı ve
+          yönlendirmeli yorum alabilirsin.</p>
 
-        <form id="dream-form" novalidate>
-          <div class="row">
-            <div>
-              <label for="name">Ad Soyad</label>
-              <input id="name" name="name" type="text" placeholder="Ad Soyad" autocomplete="name" />
-            </div>
-            <div>
-              <label for="email">E-posta</label>
-              <input id="email" name="email" type="email" placeholder="ornek@mail.com" autocomplete="email" required />
-            </div>
+        <!-- HONEYPOT (botlar için) -->
+        <input type="text" name="_honey" id="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+
+        <div class="row">
+          <div>
+            <label for="name">Ad Soyad</label>
+            <input id="name" name="name" placeholder="Adın Soyadın" required />
           </div>
-
-          <div class="row" style="margin-top:14px">
-            <div>
-              <label for="paket">Paket</label>
-              <select id="paket" name="paket">
-                <option value="Standart">Standart Rüya Yorumu (ücretsiz)</option>
-                <option value="Premium">Premium Yorum + Koçluk</option>
-              </select>
-            </div>
-            <div>
-              <label for="oncelik">Öncelik</label>
-              <select id="oncelik" name="oncelik">
-                <option value="Genel yorum">Genel yorum</option>
-                <option value="İş/para">İş / para</option>
-                <option value="Aşk/ilişki">Aşk / ilişki</option>
-                <option value="Aile">Aile</option>
-                <option value="Kariyer">Kariyer</option>
-              </select>
-            </div>
+          <div>
+            <label for="email">E-posta</label>
+            <input id="email" name="email" type="email" placeholder="ornek@mail.com" required />
           </div>
-
-          <div style="margin-top:14px">
-            <label for="mesaj">Rüyanız</label>
-            <textarea id="mesaj" name="mesaj" placeholder="Rüyanı mümkün olduğunca detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…"></textarea>
-            <div class="hint">Paylaşılan içerik gizlidir; public olarak gösterilmez.</div>
-          </div>
-
-          <button type="submit" id="submitBtn" class="btn">Gönder →</button>
-
-          <div id="form-alert" class="alert"></div>
-
-          <div class="footnote">
-            Form çalışmıyorsa <a class="link" href="mailto:uzumcu661@gmail.com">uzumcu661@gmail.com</a> adresine manuel e-posta atabilirsin.
-          </div>
-        </form>
-      </section>
-
-      <!-- RIGHT: INFO -->
-      <aside class="card aside">
-        <span class="badge">Yeni</span>
-        <h3>Premium Yorum + Koçluk</h3>
-        <p class="lead" style="margin-bottom:10px">
-          Rüyandaki sembolleri günlük hayatınla eşleştirip aksiyon önerisi istiyorsan bu alanı seç.
-          Kısaca “şimdi ne yapmalıyım?” sorusuna cevap verir.
-        </p>
-
-        <ul class="perks">
-          <li><b>Terapi değil, yönlendirme.</b> Rüya → bilinçaltı → bugün ne yapacağım zinciri.</li>
-          <li><b>24 saat içinde cevap.</b> Form bize ulaştığında mail relay çalışır (Gmail / Script).</li>
-          <li><b>Koruma / enerji yorumu.</b> İstersen eklenecek modül.</li>
-        </ul>
-
-        <div class="alert error" style="margin-top:18px">
-          API şu anda GET kabul etmiyor ama sorun değil, POST ile göndereceğiz.
         </div>
+
+        <div class="row">
+          <div>
+            <label for="package">Paket</label>
+            <select id="package" name="package">
+              <option value="free">Standart Rüya Yorumu (ücretsiz)</option>
+              <option value="premium">Premium Yorum + Koçluk</option>
+            </select>
+          </div>
+          <div>
+            <label for="priority">Öncelik</label>
+            <select id="priority" name="priority">
+              <option value="genel">Genel yorum</option>
+              <option value="iliski">İlişki / duygu</option>
+              <option value="is">İş / para</option>
+              <option value="ruhsal">Ruhsal süreç</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="message">Rüyanız</label>
+        <textarea id="message" name="message" placeholder="Rüyanı mümkün olduğunca detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…"
+                  required></textarea>
+
+        <!-- Turnstile widget -->
+        <div style="margin-top:10px">
+          <!-- KENDİ site key’inle değiştir: -->
+          <div id="turnstile-widget" class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="dark"></div>
+        </div>
+
+        <button id="submitBtn" class="btn" type="submit">Gönder →</button>
+
+        <div id="msgOk" class="alert ok hidden">Rüyan ulaştı. E-postanı kontrol edebilirsin. ✨</div>
+        <div id="msgErr" class="alert err hidden"></div>
+
+        <p class="note">Gönder’e basarak <a href="/privacy.html">Aydınlatma Metni</a>’ni kabul edersin.</p>
+      </form>
+
+      <aside class="card">
+        <div class="badge">Yeni</div>
+        <h3 style="margin:6px 0 12px">Premium Yorum + Koçluk</h3>
+        <p class="note">Rüyandaki sembolleri günlük hayatınla eşleştirip aksiyon önerisi istiyorsan bu alanı seç. “Şimdi ne yapmalıyım?” sorusuna pratik yanıt.</p>
+        <ul class="note">
+          <li>Terapi değil, yönlendirme.</li>
+          <li>24 saat içinde cevap (mesai saatleri içinde).</li>
+          <li>İsterse koruma/enerji modülü (isteğe bağlı).</li>
+        </ul>
+        <div class="tip">API şu anda GET kabul etmiyor; form zaten POST ile gönderiyor. Sorun yok ✅</div>
       </aside>
     </div>
   </div>
 
   <script>
-    const form = document.getElementById("dream-form");
-    const alertBox = document.getElementById("form-alert");
-    const btn = document.getElementById("submitBtn");
+    (function () {
+      const form = document.getElementById('dreamForm');
+      const btn  = document.getElementById('submitBtn');
+      const ok   = document.getElementById('msgOk');
+      const err  = document.getElementById('msgErr');
 
-    function showAlert(type, msg){
-      alertBox.style.display = "block";
-      alertBox.className = "alert " + (type === "ok" ? "success" : "error");
-      alertBox.textContent = msg;
-    }
+      const show = (el, text) => { if(text) el.textContent = text; el.classList.remove('hidden'); }
+      const hide = (el) => el.classList.add('hidden');
 
-    form.addEventListener("submit", async function(e){
-      e.preventDefault();
-      showAlert("ok", "Gönderiliyor… lütfen bekle.");
-      btn.disabled = true;
-      btn.style.opacity = .7;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hide(ok); hide(err);
 
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const paket = document.getElementById("paket").value;
-      const oncelik = document.getElementById("oncelik").value;
-      const mesaj = document.getElementById("mesaj").value.trim();
+        // basit doğrulama
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const message = form.message.value.trim();
+        const priority = form.priority.value;
+        const pkg = form.package.value;
+        const honey = document.getElementById('_honey').value;
 
-      if(!email){
-        showAlert("err","E-posta zorunlu alan.");
-        btn.disabled = false; btn.style.opacity = 1; return;
-      }
-
-      try{
-        const resp = await fetch("/api/send-email", {
-          method: "POST",
-          headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({ name, email, paket, oncelik, mesaj })
-        });
-
-        const data = await resp.json();
-
-        // Bu API debugging modunda; 200 dönse bile 'ok' alanına bakıyoruz.
-        if (data && data.ok) {
-          showAlert("ok", "Rüyan ulaştı. E-postanı kontrol edebilirsin. 👍");
-          form.reset();
-        } else {
-          // Konsola tüm detayı bas → bize screenshot/JSON gönderebilirsin
-          console.log("DEBUG /api/send-email response:", data);
-          const detail =
-            (data && (data.reason || data.scriptStatus || data.fetchError)) ?
-              ` (detay: ${data.reason || data.scriptStatus || data.fetchError})` : "";
-          showAlert("err", "Sunucu cevap verdi ama mail gitmedi" + detail + ". Konsolu kontrol et.");
+        if (!name || !email || !message) {
+          show(err, 'Lütfen tüm alanları doldur.');
+          return;
         }
-      }catch(err){
-        showAlert("err", "İstek sırasında hata: " + err);
-      }finally{
-        btn.disabled = false;
-        btn.style.opacity = 1;
-      }
-    });
+
+        // Turnstile token
+        let token = '';
+        try {
+          token = window.turnstile && window.turnstile.getResponse
+            ? window.turnstile.getResponse(document.getElementById('turnstile-widget'))
+            : '';
+        } catch (_) { token = ''; }
+
+        btn.disabled = true;
+
+        try {
+          const res = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, message, priority, pkg, _honey: honey, cfToken: token })
+          });
+
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            const msg = data?.error || `Sunucu cevap vermedi: ${res.status}`;
+            show(err, msg);
+            btn.disabled = false;
+            return;
+          }
+
+          // başarı
+          show(ok);
+          // 1–2 sn sonra teşekkür sayfasına da gidebilir:
+          setTimeout(() => { window.location.href = '/thanks.html?utm=contact'; }, 1200);
+
+        } catch (e) {
+          show(err, 'Bağlantı hatası. Lütfen tekrar deneyin.');
+          btn.disabled = false;
+        }
+      });
+    })();
   </script>
 </body>
 </html>
