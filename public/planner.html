@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DreamOracle | Günlük Planlayıcı</title>
+  <link rel="stylesheet" href="/styles.css?v=3" />
+</head>
+<body>
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/">DreamOracle</a>
+    <nav class="menu">
+      <a href="/ai-studio.html">AI Stüdyo</a>
+      <a href="/readings.html">Fallar</a>
+      <a href="/coach.html">Koçluk</a>
+      <a href="/contact.html" class="btn btn-primary">İletişim</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Günlük Planlayıcı — <span class="accent">Hemen taslak oluştur</span></h1>
+    <p class="lead">Hedefini ve müsait saatlerini gir, ekranda taslak plan oluşsun. İstersen e-postana da gelsin.</p>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <form id="planForm" class="card" style="max-width:900px;margin:auto;">
+      <div class="grid" style="grid-template-columns:1fr 1fr;">
+        <div>
+          <label>Ad Soyad</label>
+          <input type="text" id="name" required>
+        </div>
+        <div>
+          <label>E-posta</label>
+          <input type="email" id="email" required>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label>Günün ana hedefi</label>
+        <input type="text" id="goal" placeholder="Örn. tezde 3 sayfa yazmak, 45 dk spor, 30 dk meditasyon..." required>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 1fr; margin-top:10px;">
+        <div>
+          <label>Başlangıç</label>
+          <input type="time" id="start" value="09:00" required>
+        </div>
+        <div>
+          <label>Bitiş</label>
+          <input type="time" id="end" value="18:00" required>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label>Toplantı/Engeller (opsiyonel)</label>
+        <input type="text" id="blocks" placeholder="14:00–15:00 toplantı; 12:30–13:30 öğle vb.">
+      </div>
+
+      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-primary" type="button" id="makePlan">Taslak Oluştur</button>
+        <button class="btn" type="submit">E-posta Gönder</button>
+      </div>
+      <div id="note" class="card" style="margin-top:12px;display:none;"></div>
+
+      <div id="planOut" class="card" style="margin-top:14px; display:none;">
+        <h3>Bugünün Planı</h3>
+        <pre id="planText" style="white-space:pre-wrap;"></pre>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+const el=(id)=>document.getElementById(id);
+const note=el('note'), out=el('planOut'), planText=el('planText');
+
+function buildPlan(goal, start, end, blocks){
+  const toMin = (t)=>{const [H,M]=t.split(':').map(Number);return H*60+M;}
+  const fromMin = (m)=>`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+  const s=toMin(start), e=toMin(end); const slots=[];
+  // basit bloklar
+  const blk = (blocks||'').split(';').map(x=>x.trim()).filter(Boolean).map(x=>{
+    const m = x.match(/(\d{1,2}:\d{2})\s*[–-]\s*(\d{1,2}:\d{2})/);
+    if(!m) return null; return [toMin(m[1]), toMin(m[2])];
+  }).filter(Boolean).sort((a,b)=>a[0]-b[0]);
+
+  // 25dk odak + 5dk mola pomodoro döngüsü (örnek)
+  let t=s; let i=1;
+  while(t<e){
+    const inBlock = blk.find(b=>t>=b[0] && t<b[1]);
+    if(inBlock){ slots.push([t, inBlock[0], 'Hazırlık / Serbest']); t=inBlock[1]; continue; }
+    const endFocus = Math.min(t+25, e);
+    slots.push([t,endFocus,`Odak #${i}: ${goal}`]); t=endFocus;
+    if(t>=e) break;
+    const endBreak = Math.min(t+5, e);
+    slots.push([t,endBreak,'Mola']); t=endBreak; i++;
+  }
+  // sıkıştır
+  return slots.filter(s=>s[1]>s[0]).map(([a,b,l])=>`${fromMin(a)}–${fromMin(b)}  ${l}`).join('\n');
+}
+
+document.getElementById('makePlan').addEventListener('click', ()=>{
+  const plan = buildPlan(el('goal').value, el('start').value, el('end').value, el('blocks').value);
+  planText.textContent = plan; out.style.display='block';
+});
+
+document.getElementById('planForm').addEventListener('submit', async (e)=>{
+  e.preventDefault(); note.style.display='none';
+  const plan = planText.textContent || buildPlan(el('goal').value, el('start').value, el('end').value, el('blocks').value);
+  const p = { SERVICE_TYPE:'PLANNER', name:el('name').value.trim(), email:el('email').value.trim(), goal:el('goal').value.trim(), plan };
+
+  const res = await fetch('/api/send-email', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      subject:`Günlük Plan – ${p.name}`,
+      body:`Ad: ${p.name}\nE-posta: ${p.email}\nHedef: ${p.goal}\n\nPlan:\n${p.plan}`,
+      to: p.email
+    })
+  });
+  note.style.display='block';
+  note.textContent = res.ok ? 'Plan e-postana gönderildi.' : 'Sunucu cevap vermedi. Lütfen tekrar dene.';
+});
+</script>
+</body>
+</html>
