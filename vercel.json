@@ -1,6 +1,7 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)\\.(css|js|png|jpg|svg|ico|woff2)",
@@ -8,8 +9,5 @@
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     }
-  ],
-  "redirects": [
-    { "source": "/", "destination": "/index", "permanent": false }
   ]
 }
