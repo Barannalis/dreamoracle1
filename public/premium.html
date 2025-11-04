@@ -1,86 +1,50 @@
-<!doctype html>
-<html lang="tr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Premium • DreamOracle</title>
-  <link rel="stylesheet" href="/style.css">
-  <link rel="icon" href="/favicon.svg">
-  <meta name="description" content="Premium Rüya Yorumu + Yaşam Koçluğu paketleri. 24 saat içinde cevap, eylem planı odaklı yorum.">
-</head>
-<body>
-  <nav>
-    <div class="container navbar">
-      <a class="brand" href="/"><img src="/favicon.svg" alt="" width="20" height="20"> DreamOracle <span class="badge">AI Rüya • Koçluk</span></a>
-      <div class="navlinks">
-        <a href="/">Ana Sayfa</a>
-        <a href="/premium.html">Premium</a>
-        <a href="/faq.html">SSS</a>
-        <a href="/contact.html" class="btn">İletişim</a>
-      </div>
-    </div>
-  </nav>
+<!doctype html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DreamOracle – Premium</title>
+<link rel="icon" href="/favicon.svg">
+<style>
+  body{margin:0;background:#0c1424;color:#e8f1ff;font:16px/1.6 Inter,system-ui,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 20px}
+  a{color:#e8f1ff;text-decoration:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:22px}
+  .card{background:#101a2e;border:1px solid #1c2a46;border-radius:16px;padding:18px}
+  .btn{display:inline-block;margin-top:12px;background:#1b2a48;border:1px solid #29406d;border-radius:10px;color:#fff;padding:10px 14px}
+  .btn.brand{background:linear-gradient(135deg,#00b7ff,#4cc3ff);border:none;color:#00121f}
+</style></head><body>
+  <div class="wrap">
+    <p><a href="/">← Anasayfa</a></p>
+    <h1>Premium Yorum + Koçluk</h1>
+    <p>Rüyadan aksiyon planına, tarot/kahve/el & yıldız falına ve rüyadan videoya uzanan kapsamlı paketler.</p>
 
-  <main class="container">
-    <div class="hero">
-      <div class="kicker">yeni</div>
-      <h1 class="section-title">Premium Yorum + Koçluk</h1>
-      <p class="muted">Rüyandaki sembolleri güncel hayatıyla eşleştirip net bir <b>eylem listesi</b> çıkarıyorum. 24 saat içinde yanıt.</p>
-    </div>
-
-    <h2 class="section-title">Paketler</h2>
-    <div class="grid grid-3">
-      <div class="card">
-        <h3>Standart</h3>
-        <p class="muted small">Kısa yorum • 24 saatte yanıt</p>
-        <hr>
-        <ul class="small">
-          <li>• 1 rüya metni</li>
-          <li>• Sembol analizi</li>
-          <li>• E-posta ile teslim</li>
+    <section class="grid">
+      <article class="card">
+        <h3>Standart (Ücretsiz)</h3>
+        <ul>
+          <li>Rüya yorumu (e-posta)</li>
+          <li>24 saat içinde yanıt</li>
         </ul>
-        <hr>
-        <a class="btn" href="/contact.html">Bu paketi seç</a>
-      </div>
+        <a class="btn" href="/contact">Rüya gönder</a>
+      </article>
 
-      <div class="card">
+      <article class="card">
         <h3>Premium</h3>
-        <p class="muted small">Detaylı yorum + eylem önerileri</p>
-        <hr>
-        <ul class="small">
-          <li>• Derin bağlam analizi</li>
-          <li>• “Bugün ne yapayım?” checklist</li>
-          <li>• 24 saatte yanıt</li>
+        <ul>
+          <li>Derinlemesine yorum + mini aksiyon listesi</li>
+          <li>Terapi değil, yönlendirme</li>
+          <li>Tarot/Kahve/El & Yıldız falı isteğe bağlı</li>
         </ul>
-        <hr>
-        <a class="btn" href="/contact.html">Bu paketi seç</a>
-      </div>
+        <a class="btn brand" href="/contact?paket=premium">Premium ile gönder</a>
+      </article>
 
-      <div class="card">
-        <h3>Koçluk</h3>
-        <p class="muted small">Rüyadan hayata mini koçluk</p>
-        <hr>
-        <ul class="small">
-          <li>• Premium + takip e-postası</li>
-          <li>• 7 günlük mikro hedefler</li>
-          <li>• Enerji/koruma notları</li>
+      <article class="card">
+        <h3>Pro (Koçluk)</h3>
+        <ul>
+          <li>Premium + 4 haftalık koçluk</li>
+          <li>Haftalık plan & takip</li>
+          <li>Rüyadan video (kısa Reels/TikTok)</li>
         </ul>
-        <hr>
-        <a class="btn" href="/contact.html">Bu paketi seç</a>
-      </div>
-    </div>
-
-    <h2 class="section-title">Nasıl çalışır?</h2>
-    <div class="grid grid-2">
-      <div class="card"><b>1)</b> Formu doldur → paket seç → rüyanı yaz.</div>
-      <div class="card"><b>2)</b> Mail relay ile bana düşer. 24 saat içinde yanıtlarım.</div>
-    </div>
-  </main>
-
-  <footer>
-    <div class="container small">
-      © 2025 DreamOracle — <a href="/privacy.html">Gizlilik</a> • <a href="/terms.html">Şartlar</a>
-    </div>
-  </footer>
-</body>
-</html>
+        <a class="btn brand" href="/contact?paket=pro">Pro ile gönder</a>
+      </article>
+    </section>
+  </div>
+</body></html>
