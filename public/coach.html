@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DreamOracle | Yaşam Koçluğu</title>
+  <link rel="stylesheet" href="/styles.css?v=3" />
+</head>
+<body>
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/">DreamOracle</a>
+    <nav class="menu">
+      <a href="/ai-studio.html">AI Stüdyo</a>
+      <a href="/readings.html">Fallar</a>
+      <a href="/planner.html">Planlayıcı</a>
+      <a href="/contact.html" class="btn btn-primary">İletişim</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Yaşam Koçluğu — <span class="accent">Hedef → Aksiyon</span></h1>
+    <p class="lead">Hedeflerini yaz, mevcut bariyerlerini belirt; ilk yol haritan e-postana gelsin.</p>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <form id="coachForm" class="card" style="max-width:820px;margin:auto;">
+      <div class="grid" style="grid-template-columns:1fr 1fr;">
+        <div>
+          <label>Ad Soyad</label>
+          <input type="text" id="name" required>
+        </div>
+        <div>
+          <label>E-posta</label>
+          <input type="email" id="email" required>
+        </div>
+      </div>
+      <div style="margin-top:10px;">
+        <label>Hedeflerin (3 madde)</label>
+        <textarea id="goals" rows="4" placeholder="- ...\n- ...\n- ..." required></textarea>
+      </div>
+      <div style="margin-top:10px;">
+        <label>Bariyerler / Zorluklar</label>
+        <textarea id="barriers" rows="3" placeholder="Zaman, motivasyon, kaynak vb."></textarea>
+      </div>
+      <div style="margin-top:10px;">
+        <label>Alışkanlıklar (varsa)</label>
+        <input type="text" id="habits" placeholder="Örn. her sabah yürüyüş, haftada 3 gün spor">
+      </div>
+      <div style="margin-top:14px;">
+        <button class="btn btn-primary" type="submit">Başvuruyu Gönder →</button>
+      </div>
+      <div id="note" class="card" style="margin-top:12px;display:none;"></div>
+    </form>
+  </div>
+</section>
+
+<script>
+const el=(id)=>document.getElementById(id); const note=el('note');
+document.getElementById('coachForm').addEventListener('submit', async (e)=>{
+  e.preventDefault(); note.style.display='none';
+  const p = {
+    SERVICE_TYPE:'COACHING',
+    name: el('name').value.trim(),
+    email: el('email').value.trim(),
+    goals: el('goals').value.trim(),
+    barriers: el('barriers').value.trim(),
+    habits: el('habits').value.trim()
+  };
+  const res = await fetch('/api/send-email', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      subject:`Koçluk Başvurusu – ${p.name}`,
+      body:`Ad: ${p.name}\nE-posta: ${p.email}\n\nHedefler:\n${p.goals}\n\nBariyerler:\n${p.barriers}\n\nAlışkanlıklar:\n${p.habits}`,
+      to: p.email
+    })
+  });
+  note.style.display='block';
+  note.textContent = res.ok ? 'Başvurun alındı. E-postanı kontrol edebilirsin.' : 'Sunucu cevap vermedi. Lütfen tekrar dene.';
+});
+</script>
+</body>
+</html>
