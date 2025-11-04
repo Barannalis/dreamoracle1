@@ -1,103 +1,61 @@
-<!doctype html>
-<html lang="tr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Günlük Plan – DreamOracle</title>
-  <link rel="icon" href="/favicon.svg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>body{font-family:Inter,system-ui}</style>
-</head>
-<body class="bg-slate-950 text-slate-200">
-  <div class="max-w-5xl mx-auto px-4 py-10">
-    <div class="flex items-center justify-between gap-4">
-      <a href="/" class="text-sm text-slate-400 hover:text-slate-200">← Anasayfa</a>
-      <a href="/contact.html" class="text-sm rounded-md bg-cyan-300 px-3 py-1.5 text-slate-900 font-semibold hover:bg-cyan-200">Rüya Gönder</a>
+<!doctype html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Günlük Plan & Koçluk | DreamOracle</title>
+<meta name="description" content="Rüya temalarını haftalık mikro hedeflere ve günlük plana dönüştürelim.">
+<link rel="icon" href="/favicon.svg">
+<style>
+:root{--bg:#0c1424;--panel:#0f1a2e;--ink:#e8f1ff;--muted:#a3badc;--line:#1a2743;--brand:#46c8ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui}
+.wrap{max-width:980px;margin:0 auto;padding:24px}
+a{color:#8dd8ff;text-decoration:none}.muted{color:var(--muted)}
+nav{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{font-weight:800}
+.btn{background:#123155;border:1px solid #224670;color:#dff6ff;padding:10px 14px;border-radius:12px;display:inline-flex;gap:8px}
+.btn-primary{background:linear-gradient(180deg,#45c8ff,#16a0db);border-color:#2998c8;color:#06233b}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.grid{display:grid;gap:18px;grid-template-columns:1.1fr .9fr}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.figure{min-height:260px;border-radius:16px;overflow:hidden;background:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop') center/cover}
+.h2{font-size:34px;line-height:1.15;margin:8px 0 6px}
+.check{width:18px;height:18px;border-radius:4px;background:#1f824f;border:1px solid #2aa16a;margin-top:4px}
+.row{display:flex;gap:8px;align-items:flex-start}
+</style></head><body>
+<header class="wrap">
+  <nav><div class="brand">DreamOracle</div>
+    <div style="display:flex;gap:10px">
+      <a href="/index.html">Anasayfa</a><a href="/premium.html">Premium</a><a class="btn" href="/contact.html">İletişim</a>
     </div>
+  </nav>
+</header>
 
-    <h1 class="mt-4 text-3xl font-extrabold">Günlük Plan & Koçluk</h1>
-    <p class="mt-2 text-slate-400">Rüyandan çıkan temalara göre küçük ama etkili adımlar.</p>
-
-    <div class="mt-6 grid md:grid-cols-3 gap-6">
-      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
-        <div class="text-sm text-slate-400">Bugünün Teması</div>
-        <input id="theme" class="mt-2 w-full rounded bg-white/5 border border-white/10 px-3 py-2" placeholder="Temizlik / Geçiş / Cesaret…">
-      </div>
-      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
-        <div class="text-sm text-slate-400">1 Küçük Adım</div>
-        <input id="step" class="mt-2 w-full rounded bg-white/5 border border-white/10 px-3 py-2" placeholder="Yarım kalan bir işi 10 dk ilerlet">
-      </div>
-      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
-        <div class="text-sm text-slate-400">Ritüel</div>
-        <input id="ritual" class="mt-2 w-full rounded bg-white/5 border border-white/10 px-3 py-2" placeholder="3 dk nefes + sıcak duş + şükür">
-      </div>
-    </div>
-
-    <div class="mt-6 grid md:grid-cols-2 gap-6">
-      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
-        <div class="flex items-center justify-between">
-          <div class="text-sm text-slate-400">Alışkanlıklar</div>
-          <button id="addHabit" class="text-xs px-2 py-1 rounded bg-white/10 hover:bg-white/15">+ Ekle</button>
-        </div>
-        <ul id="habitList" class="mt-2 space-y-2"></ul>
-      </div>
-
-      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
-        <div class="text-sm text-slate-400">Notlar</div>
-        <textarea id="notes" rows="6" class="mt-2 w-full rounded bg-white/5 border border-white/10 px-3 py-2" placeholder="Gözlemler, duygular, tekrar eden semboller…"></textarea>
+<main class="wrap">
+  <div class="grid">
+    <div class="panel">
+      <h1 class="h2">Kişisel Yaşam Koçluğu</h1>
+      <p class="muted">Rüya/okumalar → haftalık mikro hedefler → gün planı. Net, uygulanabilir ve ölçülebilir.</p>
+      <div class="row"><span class="check"></span><span>7 gün mikro takip (DM/e-posta)</span></div>
+      <div class="row"><span class="check"></span><span>Günlük 1 blok odak + küçük rapor</span></div>
+      <div class="row"><span class="check"></span><span>Haftalık mini retro & bir sonraki sprint</span></div>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <a class="btn btn-primary" href="/contact.html?paket=pro&kategori=kocluk">Koçluk başlat</a>
+        <a class="btn" href="/premium.html">Paket karşılaştır</a>
       </div>
     </div>
-
-    <div class="mt-6 flex items-center gap-3">
-      <button id="saveBtn" class="rounded-md bg-cyan-300 px-4 py-2 text-slate-900 font-semibold hover:bg-cyan-200">Kaydet</button>
-      <span id="saved" class="text-sm text-slate-400 hidden">Kaydedildi ✓</span>
-    </div>
+    <div class="figure"></div>
   </div>
 
-  <script>
-    const q = id => document.getElementById(id);
-    const keys = ['theme','step','ritual','notes'];
-
-    // localStorage load
-    keys.forEach(k=>{ const v=localStorage.getItem('coach_'+k); if(v) q(k).value=v; });
-
-    const habitList = q('habitList');
-    const save = ()=>{
-      keys.forEach(k=>localStorage.setItem('coach_'+k,q(k).value));
-      const habits=[...habitList.querySelectorAll('input[type="checkbox"]')].map(cb=>({t:cb.nextSibling.textContent.trim(), c:cb.checked}));
-      localStorage.setItem('coach_habits', JSON.stringify(habits));
-      q('saved').classList.remove('hidden');
-      setTimeout(()=>q('saved').classList.add('hidden'), 1200);
-    };
-    q('saveBtn').onclick = save;
-    keys.forEach(k=>q(k).addEventListener('change', save));
-
-    // habits
-    function renderHabits(){
-      habitList.innerHTML='';
-      const items = JSON.parse(localStorage.getItem('coach_habits')||'[]');
-      items.forEach((h,i)=>{
-        const li=document.createElement('li');
-        li.className='flex items-center gap-2';
-        li.innerHTML = `<input type="checkbox" ${h.c?'checked':''} class="accent-cyan-300">
-                        <span class="flex-1">${h.t}</span>
-                        <button class="text-xs text-rose-300 hover:underline">Sil</button>`;
-        li.querySelector('input').addEventListener('change', save);
-        li.querySelector('button').addEventListener('click', ()=>{items.splice(i,1); localStorage.setItem('coach_habits',JSON.stringify(items)); renderHabits();});
-        habitList.appendChild(li);
-      });
-    }
-    renderHabits();
-
-    q('addHabit').onclick = ()=>{
-      const t=prompt('Alışkanlık: (ör. 10 dk yürüyüş)');
-      if(!t) return;
-      const items=JSON.parse(localStorage.getItem('coach_habits')||'[]');
-      items.push({t, c:false});
-      localStorage.setItem('coach_habits', JSON.stringify(items));
-      renderHabits();
-    };
-  </script>
-</body>
-</html>
+  <!-- Burada mevcut plan formun varsa aşağıya kalabilir; yoksa ek generik form: -->
+  <section style="margin-top:20px" class="panel">
+    <b>Kısa form</b>
+    <form action="/contact.html">
+      <input type="hidden" name="paket" value="pro">
+      <input type="hidden" name="kategori" value="kocluk">
+      <div style="display:grid;gap:10px;margin-top:10px">
+        <input name="ad" placeholder="Ad Soyad" style="padding:10px;border-radius:10px;border:1px solid #274567;background:#0c1a30;color:#e8f1ff">
+        <input name="eposta" type="email" placeholder="E-posta" style="padding:10px;border-radius:10px;border:1px solid #274567;background:#0c1a30;color:#e8f1ff">
+        <textarea name="not" rows="4" placeholder="Kısa hedef / mevcut durum" style="padding:10px;border-radius:10px;border:1px solid #274567;background:#0c1a30;color:#e8f1ff"></textarea>
+        <button class="btn btn-primary" type="submit">Devam et</button>
+      </div>
+    </form>
+  </section>
+</main>
+</body></html>
