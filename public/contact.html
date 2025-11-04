@@ -2,130 +2,236 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rüya Gönder – DreamOracle</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rüyanı Gönder | DreamOracle</title>
+  <meta name="description" content="Formu doldur, 24 saat içinde gelen kutuna yorum gelsin. İstersen Premium yorum ve koçluk da ekleyebilirsin.">
   <link rel="icon" href="/favicon.svg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>body{font-family:Inter,system-ui}</style>
-</head>
-<body class="min-h-screen bg-slate-950 text-slate-200">
-  <div class="max-w-3xl mx-auto px-4 py-10">
-    <a href="/" class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200">
-      <i class="ri-arrow-left-line"></i> Anasayfa
-    </a>
-
-    <h1 class="mt-4 text-3xl font-extrabold">Rüyanı Gönder</h1>
-    <p class="mt-2 text-slate-400">Formu doldur; e-postana dönüş yapalım. İstersen Premium koçluk iste.</p>
-
-    <form id="dreamForm" class="mt-6 space-y-4">
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label class="text-sm text-slate-400">Ad Soyad</label>
-          <input id="name" required class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2" placeholder="Ali Baran Üzümcü">
-        </div>
-        <div>
-          <label class="text-sm text-slate-400">E-posta</label>
-          <input id="email" required type="email" class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2" placeholder="ornek@mail.com">
-        </div>
-      </div>
-
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label class="text-sm text-slate-400">Paket</label>
-          <select id="package" class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2">
-            <option value="Standart">Standart Yorum (Ücretsiz)</option>
-            <option value="Premium">Premium Yorum + Koçluk</option>
-            <option value="Ekstra">Tarot / Kahve / Yıldız</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-sm text-slate-400">Öncelik</label>
-          <select id="priority" class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2">
-            <option>Genel yorum</option>
-            <option>İş/Kariyer</option>
-            <option>İlişki</option>
-            <option>Sağlık/Rutin</option>
-          </select>
-        </div>
-      </div>
-
-      <div>
-        <label class="text-sm text-slate-400">Rüyan</label>
-        <textarea id="dream" required rows="8" class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2" placeholder="Detaylı yaz: yerler, kişiler, hisler, tekrar eden semboller…"></textarea>
-      </div>
-
-      <!-- honeypot -->
-      <input id="website" class="hidden" autocomplete="off">
-
-      <div id="status" class="hidden rounded-md border px-3 py-2 text-sm"></div>
-
-      <button id="submitBtn" class="w-full sm:w-auto inline-flex items-center gap-2 rounded-md bg-cyan-300 px-5 py-2.5 text-slate-900 font-semibold hover:bg-cyan-200">
-        <i class="ri-send-plane-fill"></i> Gönder
-      </button>
-    </form>
-
-    <p class="mt-6 text-xs text-slate-500">
-      Verilerin yalnızca yanıt oluşturmak için kullanılır, kaydedilmez.
-    </p>
-  </div>
-
-  <script>
-    // URL parametresi ile paket seçimi
-    const params=new URLSearchParams(location.search);
-    if(params.get('paket')) document.getElementById('package').value =
-      params.get('paket').toLowerCase()==='premium' ? 'Premium'
-    : params.get('paket').toLowerCase()==='ekstra' ? 'Ekstra' : 'Standart';
-
-    const form = document.getElementById('dreamForm');
-    const statusBox = document.getElementById('status');
-    const btn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      // basit anti-bot
-      if(document.getElementById('website').value) return;
-
-      const payload = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        pkg: document.getElementById('package').value,
-        priority: document.getElementById('priority').value,
-        message: document.getElementById('dream').value.trim()
-      };
-
-      // basit doğrulama
-      if(!payload.name || !payload.email || !payload.message){
-        showStatus('Lütfen tüm alanları doldur.', false); return;
-      }
-
-      btn.disabled = true; btn.innerHTML = 'Gönderiliyor…';
-
-      try{
-        const res = await fetch('/api/send-email', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
-        if(!res.ok) throw new Error('Sunucu hatası: '+res.status);
-        showStatus('Rüyan ulaştı. E-postanı kontrol edebilirsin. ✨', true);
-        form.reset();
-      }catch(err){
-        showStatus('Gönderilemedi: '+err.message, false);
-      }finally{
-        btn.disabled=false; btn.innerHTML='<i class="ri-send-plane-fill"></i> Gönder';
-      }
-    });
-
-    function showStatus(msg, ok){
-      statusBox.className =
-        "mt-3 rounded-md border px-3 py-2 text-sm " +
-        (ok ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300"
-            : "border-rose-400/40 bg-rose-400/10 text-rose-300");
-      statusBox.textContent = msg;
-      statusBox.classList.remove('hidden');
+  <style>
+    :root{
+      --bg:#0c1424;--panel:#0f1a2e;--ink:#e8f1ff;--muted:#a3badc;--line:#1a2743;
+      --brand:#46c8ff;--accent:#16a0db;--ok:#2aa16a;--err:#cc3d4b
     }
-  </script>
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto}
+    .wrap{max-width:980px;margin:0 auto;padding:24px}
+    nav{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:10px 0}
+    a{color:#8dd8ff;text-decoration:none}
+    .brand{font-weight:800}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+    label{display:block;margin:10px 0 6px;color:#cfe2ff}
+    input,select,textarea{
+      width:100%;padding:12px 12px;border-radius:12px;border:1px solid #274567;
+      background:#0c1a30;color:#e8f1ff;outline:none
+    }
+    textarea{min-height:160px;resize:vertical}
+    .btn{
+      background:#123155;border:1px solid #224670;color:#dff6ff;padding:12px 16px;border-radius:12px;
+      display:inline-flex;gap:8px;cursor:pointer
+    }
+    .btn-primary{background:linear-gradient(180deg,#45c8ff,#16a0db);border-color:#2998c8;color:#06233b}
+    .grid{display:grid;gap:18px;grid-template-columns:1.1fr .9fr}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .badge{display:inline-flex;gap:8px;background:#0f243e;border:1px solid #223a5f;color:#9fd3ff;padding:6px 10px;border-radius:999px;font-size:12px}
+    .muted{color:var(--muted)}
+    .note-ok,.note-err{margin-top:12px;padding:12px;border-radius:10px}
+    .note-ok{background:#0f2a22;border:1px solid #1f6f4d;color:#b7ffdc}
+    .note-err{background:#2a0f14;border:1px solid #7a2a36;color:#ffc3cd}
+    .aside{display:grid;gap:12px}
+    .kicker{letter-spacing:.2em;text-transform:uppercase;color:#8fb1d6;font-size:12px}
+    .pill{display:inline-flex;padding:4px 10px;border:1px solid #224670;border-radius:999px;background:#0f2542;color:#bfe6ff;font-size:12px}
+  </style>
+</head>
+<body>
+<header class="wrap">
+  <nav>
+    <div class="brand">DreamOracle</div>
+    <div style="display:flex;gap:12px">
+      <a href="/index.html">Anasayfa</a>
+      <a href="/premium.html">Premium</a>
+      <a class="pill" href="/coach.html">Koçluk</a>
+    </div>
+  </nav>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <section class="panel">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <span class="badge" id="kategoriBadge" hidden></span>
+        <span class="badge" id="paketBadge" hidden></span>
+      </div>
+
+      <h1 style="margin:8px 0 2px">Rüyanı Gönder</h1>
+      <p class="muted" style="margin:0 0 12px">Formu doldur, 24 saat içinde e-postana yanıt gelsin. URL’den geldiysen kategori/paket alanlarını senin için seçtik.</p>
+
+      <form id="dreamForm" novalidate>
+        <!-- gizli alanlar (server’a düz metin olarak gitsin) -->
+        <input type="hidden" name="kategori" id="kategoriHidden">
+        <input type="hidden" name="paket" id="paketHidden">
+
+        <label for="name">Ad Soyad</label>
+        <input id="name" name="name" placeholder="Ad Soyad" autocomplete="name" required>
+
+        <label for="email">E-posta</label>
+        <input id="email" name="email" type="email" placeholder="ornek@mail.com" autocomplete="email" required>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px">
+          <div>
+            <label for="paket">Paket</label>
+            <select id="paket" name="paket_select">
+              <option value="standart">Standart (Ücretsiz)</option>
+              <option value="master">Premium Yorum + Koçluk</option>
+              <option value="pro">Koçluk (7 gün mikro takip)</option>
+            </select>
+          </div>
+          <div>
+            <label for="oncelik">Öncelik</label>
+            <select id="oncelik" name="priority">
+              <option value="genel">Genel yorum</option>
+              <option value="kariyer">Kariyer/para odağı</option>
+              <option value="iliski">İlişki/iletişim odağı</option>
+              <option value="saglik">Rutin/sağlık odağı</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="message" style="margin-top:8px">Rüyanız</label>
+        <textarea id="message" name="message" placeholder="Rüyanı mümkün olduğunca detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…" required></textarea>
+
+        <!-- basit honeypot -->
+        <input type="text" name="website" id="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0">
+
+        <button class="btn btn-primary" type="submit" id="submitBtn">Gönder →</button>
+        <div id="note" class="note-ok" style="display:none"></div>
+        <div id="noteErr" class="note-err" style="display:none"></div>
+      </form>
+    </section>
+
+    <aside class="aside">
+      <div class="panel">
+        <div class="kicker">Neler olur?</div>
+        <ul style="margin:8px 0 0 18px">
+          <li>Rüyadaki temaları hedeflerle eşleştiririz.</li>
+          <li>3–5 maddelik küçük aksiyon listesi çıkar.</li>
+          <li>Standartta 24 saat içinde e-posta alırsın.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <b>İpuçları</b>
+        <p class="muted">Tekrarlayan semboller, güçlü duygular ve “uyandıktan sonra aklımda kalan” sahneler çok yardımcı olur.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<script>
+(function(){
+  const qs = new URLSearchParams(location.search);
+  const kategori = (qs.get('kategori') || '').toLowerCase();     // ruya, tarot, kahve, astro, kocluk
+  const paketQS  = (qs.get('paket')    || '').toLowerCase();     // standart, master, pro
+
+  const kategoriHidden = document.getElementById('kategoriHidden');
+  const paketHidden    = document.getElementById('paketHidden');
+  const paketSelect    = document.getElementById('paket');
+  const kategoriBadge  = document.getElementById('kategoriBadge');
+  const paketBadge     = document.getElementById('paketBadge');
+
+  // Kategori etiketi (rozet)
+  const kategoriMap = {
+    ruya:'Rüya', tarot:'Tarot', kahve:'Kahve', astro:'Yıldız', kocluk:'Koçluk'
+  };
+  if (kategori && kategoriMap[kategori]) {
+    kategoriBadge.textContent = 'Kategori: ' + kategoriMap[kategori];
+    kategoriBadge.hidden = false;
+    kategoriHidden.value = kategoriMap[kategori];
+  }
+
+  // Paket seçim ve rozet
+  const validPacks = ['standart','master','pro'];
+  if (validPacks.includes(paketQS)) {
+    paketSelect.value = paketQS;
+    paketBadge.textContent = 'Paket: ' + (
+      paketQS === 'standart' ? 'Standart' :
+      paketQS === 'master'   ? 'Premium Yorum + Koçluk' : 'Koçluk'
+    );
+    paketBadge.hidden = false;
+    paketHidden.value = paketQS;
+  } else {
+    // URL yoksa, kullanıcı seçim yapsın; gönderirken yine koyacağız
+    paketHidden.value = paketSelect.value;
+  }
+
+  // Seçim değişirse hidden alanı güncelle
+  paketSelect.addEventListener('change', () => {
+    paketHidden.value = paketSelect.value;
+    if(!paketBadge.hidden){
+      paketBadge.textContent = 'Paket: ' + (
+        paketSelect.value === 'standart' ? 'Standart' :
+        paketSelect.value === 'master'   ? 'Premium Yorum + Koçluk' : 'Koçluk'
+      );
+    }
+  });
+
+  // Form gönderimi
+  const form = document.getElementById('dreamForm');
+  const noteOk = document.getElementById('note');
+  const noteErr= document.getElementById('noteErr');
+  const btn    = document.getElementById('submitBtn');
+
+  function show(el, msg){ el.textContent = msg; el.style.display='block'; }
+  function hideAll(){ noteOk.style.display='none'; noteErr.style.display='none'; }
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    hideAll();
+
+    // Basit validasyon
+    const name = form.name.value.trim();
+    const email= form.email.value.trim();
+    const msg  = form.message.value.trim();
+    if (!name || !email || !msg){
+      show(noteErr, 'Lütfen ad, e-posta ve rüya alanlarını doldur.');
+      return;
+    }
+    // honeypot
+    if (form.website.value) { show(noteErr,'İstek reddedildi.'); return; }
+
+    btn.disabled = true; btn.textContent = 'Gönderiliyor…';
+
+    // Sunucuya paketi/kategoriyi açıkça ilet
+    const payload = {
+      name, email,
+      paket:pakket(form),
+      kategori: kategoriHidden.value || kategoriMap[kategori] || '',
+      priority: form.priority.value,
+      message: msg
+    };
+
+    try{
+      const res = await fetch('/api/send-email', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if(!res.ok) throw new Error('Sunucu: '+res.status);
+      show(noteOk,'Rüyan ulaştı. E-postanı kontrol edebilirsin. 👍');
+      form.reset();
+      // seçili rozetleri sıfırlama (paketi varsayılan yap)
+      paketSelect.value = 'standart';
+      paketHidden.value = 'standart';
+    }catch(err){
+      console.error(err);
+      show(noteErr,'Bir şeyler ters gitti. Birazdan tekrar dener misin?');
+    }finally{
+      btn.disabled = false; btn.textContent = 'Gönder →';
+    }
+  });
+
+  function pakket(f){
+    // hidden varsa onu kullan, yoksa select
+    return (paketHidden.value || f.paket_select.value || 'standart').toLowerCase();
+  }
+})();
+</script>
 </body>
 </html>
