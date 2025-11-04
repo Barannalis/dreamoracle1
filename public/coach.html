@@ -1,70 +1,75 @@
-<!doctype html><html lang="tr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DreamOracle – Günlük Plan</title>
-<link rel="icon" href="/favicon.svg">
-<style>
-  body{margin:0;background:#0c1424;color:#e8f1ff;font:16px/1.6 Inter,system-ui,sans-serif}
-  .wrap{max-width:900px;margin:0 auto;padding:28px 20px}
-  a{color:#e8f1ff;text-decoration:none}
-  .panel{background:#101a2e;border:1px solid #1c2a46;border-radius:16px;padding:18px;margin-top:16px}
-  label{display:block;margin:8px 0 4px;color:#a8b6cb}
-  input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #29406d;background:#0f1a2f;color:#e8f1ff}
-  textarea{min-height:120px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .btn{margin-top:12px;background:#1b2a48;border:1px solid #29406d;border-radius:10px;color:#fff;padding:10px 14px;cursor:pointer}
-  .success,.warn{display:none;margin-top:10px;padding:10px;border-radius:10px}
-  .success{background:#0d2a19;border:1px solid #1a7b4b;color:#b7ffd8}
-  .warn{background:#2a140f;border:1px solid #7b3c1a;color:#ffd0b7}
-</style></head><body>
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Günlük Plan & Koçluk • DreamOracle</title>
+  <link rel="canonical" href="https://dreamoracle.space/coach.html">
+  <link rel="icon" href="/favicon.svg" />
+  <style>
+    body{margin:0;background:#0b1220;color:#e8f1ff;font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif}
+    .wrap{max-width:960px;margin:0 auto;padding:24px}
+    .nav{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-bottom:18px}
+    .brand{margin-right:auto;font-weight:700}
+    .panel{background:#0f1a2f;border:1px solid #13233f;border-radius:16px;padding:18px}
+    label{display:block;margin:8px 0 6px}
+    textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #29486d;background:#0c1424;color:#e8f1ff}
+    input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #29486d;background:#0c1424;color:#e8f1ff}
+    button{margin-top:14px;background:linear-gradient(90deg,#3da1ff,#9ad1ff);border:0;color:#08101f;font-weight:700;padding:12px 16px;border-radius:12px;cursor:pointer}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .note{color:#8aa4c8}
+    a{color:#9ad1ff;text-decoration:none} a:hover{text-decoration:underline}
+    @media (max-width:820px){ .grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
   <div class="wrap">
-    <p><a href="/">← Anasayfa</a></p>
+    <nav class="nav">
+      <div class="brand">DreamOracle</div>
+      <a href="/index.html">Anasayfa</a>
+      <a href="/coach.html">Koçluk</a>
+      <a href="/contact.html">İletişim</a>
+    </nav>
+
     <h1>Günlük Plan & Koçluk</h1>
-    <section class="panel">
-      <div class="row">
-        <div>
-          <label>Ad Soyad</label>
-          <input id="c-name" placeholder="Adın Soyadın">
-        </div>
-        <div>
-          <label>E-posta</label>
-          <input id="c-email" placeholder="ornek@mail.com">
-        </div>
-      </div>
-      <label>Bugünün 1-3 ana hedefi</label>
-      <input id="c-goals" placeholder="Örn. X sunumu, 30 dk yürüyüş, 15 dk meditasyon">
-      <label>Rüyadan çıkan ipuçları (opsiyonel)</label>
-      <textarea id="c-dream" placeholder="Tekrar eden sembol/duygu/tema?"></textarea>
-      <label>Notlar & esneklik</label>
-      <textarea id="c-notes" placeholder="Örn. 13:30 toplantı, akşam esneme"></textarea>
-      <button class="btn" onclick="submitCoach()">Planı oluştur (e-posta gönder)</button>
-      <div class="success" id="c-ok">Plan iletildi. E-posta kutunu kontrol et. ✅</div>
-      <div class="warn" id="c-err">Sunucu cevap vermedi. Lütfen tekrar dene.</div>
-    </section>
+    <p class="note">Rüya temalarını hedeflerinle eşleştir; “bugün ne yapmalıyım?” sorusuna net cevaplar çıkar.</p>
+
+    <div class="grid">
+      <section class="panel">
+        <h3>Girdi</h3>
+        <label>Bugünün odağı</label>
+        <input id="focus" placeholder="Örn. 'Odaklanma / Para / İlişki'">
+        <label>Kısa notlar</label>
+        <textarea id="notes" rows="7" placeholder="Rüya temaları / hisler / tetikleyiciler…"></textarea>
+        <button id="planBtn">Planı oluştur →</button>
+        <div class="note" id="msg"></div>
+      </section>
+
+      <section class="panel">
+        <h3>Çıktı</h3>
+        <div class="note">3 maddelik mikro aksiyon listesi:</div>
+        <ol id="planList" style="margin-top:10px"></ol>
+      </section>
+    </div>
   </div>
 
-<script>
-async function submitCoach(){
-  try{
-    const res = await fetch('/api/send-email',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        subject:'[DreamOracle] Günlük Plan Talebi',
-        name:document.getElementById('c-name').value.trim(),
-        email:document.getElementById('c-email').value.trim(),
-        message:
-`Hedefler: ${document.getElementById('c-goals').value.trim()}
-Rüya ipuçları: ${document.getElementById('c-dream').value.trim()}
-Notlar: ${document.getElementById('c-notes').value.trim()}`
-      })
+  <script>
+    // Basit yerel örnek (sonra AI endpoint’i ile değiştirebiliriz)
+    const $ = s => document.querySelector(s);
+    $("#planBtn").addEventListener("click", () => {
+      const focus = $("#focus").value.trim() || "Genel";
+      const notes = $("#notes").value.trim();
+      const ideas = [
+        `• ${focus} için 10 dakikalık tek iş odak bloğu başlat.`,
+        "• 5 dakikalık nefes/niyet: rüyadaki duyguyu kabul et, günün tonunu ayarla.",
+        "• Birine küçük bir teşekkür/mesaj; ilişki enerjisini akıt.",
+        "• 15 dakikalık düzenleme/temizlik: zihni boşalt, alan aç.",
+        "• Kısa yürüyüş + müzik: yaratıcı içgüdüyü tetikle."
+      ];
+      const out = [ideas[0], ideas[1], ideas[2]];
+      $("#planList").innerHTML = out.map(i => `<li>${i}</li>`).join("");
+      $("#msg").textContent = notes ? "Notlar işlendi." : "";
     });
-    const ok = res.ok;
-    document.getElementById('c-ok').style.display = ok?'block':'none';
-    document.getElementById('c-err').style.display = ok?'none':'block';
-  }catch(e){
-    document.getElementById('c-ok').style.display='none';
-    document.getElementById('c-err').style.display='block';
-  }
-}
-</script>
-</body></html>
+  </script>
+</body>
+</html>
