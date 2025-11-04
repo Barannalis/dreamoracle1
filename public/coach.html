@@ -1,75 +1,103 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Günlük Plan & Koçluk • DreamOracle</title>
-  <link rel="canonical" href="https://dreamoracle.space/coach.html">
-  <link rel="icon" href="/favicon.svg" />
-  <style>
-    body{margin:0;background:#0b1220;color:#e8f1ff;font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif}
-    .wrap{max-width:960px;margin:0 auto;padding:24px}
-    .nav{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-bottom:18px}
-    .brand{margin-right:auto;font-weight:700}
-    .panel{background:#0f1a2f;border:1px solid #13233f;border-radius:16px;padding:18px}
-    label{display:block;margin:8px 0 6px}
-    textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #29486d;background:#0c1424;color:#e8f1ff}
-    input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #29486d;background:#0c1424;color:#e8f1ff}
-    button{margin-top:14px;background:linear-gradient(90deg,#3da1ff,#9ad1ff);border:0;color:#08101f;font-weight:700;padding:12px 16px;border-radius:12px;cursor:pointer}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .note{color:#8aa4c8}
-    a{color:#9ad1ff;text-decoration:none} a:hover{text-decoration:underline}
-    @media (max-width:820px){ .grid{grid-template-columns:1fr} }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Günlük Plan – DreamOracle</title>
+  <link rel="icon" href="/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{font-family:Inter,system-ui}</style>
 </head>
-<body>
-  <div class="wrap">
-    <nav class="nav">
-      <div class="brand">DreamOracle</div>
-      <a href="/index.html">Anasayfa</a>
-      <a href="/coach.html">Koçluk</a>
-      <a href="/contact.html">İletişim</a>
-    </nav>
+<body class="bg-slate-950 text-slate-200">
+  <div class="max-w-5xl mx-auto px-4 py-10">
+    <div class="flex items-center justify-between gap-4">
+      <a href="/" class="text-sm text-slate-400 hover:text-slate-200">← Anasayfa</a>
+      <a href="/contact.html" class="text-sm rounded-md bg-cyan-300 px-3 py-1.5 text-slate-900 font-semibold hover:bg-cyan-200">Rüya Gönder</a>
+    </div>
 
-    <h1>Günlük Plan & Koçluk</h1>
-    <p class="note">Rüya temalarını hedeflerinle eşleştir; “bugün ne yapmalıyım?” sorusuna net cevaplar çıkar.</p>
+    <h1 class="mt-4 text-3xl font-extrabold">Günlük Plan & Koçluk</h1>
+    <p class="mt-2 text-slate-400">Rüyandan çıkan temalara göre küçük ama etkili adımlar.</p>
 
-    <div class="grid">
-      <section class="panel">
-        <h3>Girdi</h3>
-        <label>Bugünün odağı</label>
-        <input id="focus" placeholder="Örn. 'Odaklanma / Para / İlişki'">
-        <label>Kısa notlar</label>
-        <textarea id="notes" rows="7" placeholder="Rüya temaları / hisler / tetikleyiciler…"></textarea>
-        <button id="planBtn">Planı oluştur →</button>
-        <div class="note" id="msg"></div>
-      </section>
+    <div class="mt-6 grid md:grid-cols-3 gap-6">
+      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
+        <div class="text-sm text-slate-400">Bugünün Teması</div>
+        <input id="theme" class="mt-2 w-full rounded bg-white/5 border border-white/10 px-3 py-2" placeholder="Temizlik / Geçiş / Cesaret…">
+      </div>
+      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
+        <div class="text-sm text-slate-400">1 Küçük Adım</div>
+        <input id="step" class="mt-2 w-full rounded bg-white/5 border border-white/10 px-3 py-2" placeholder="Yarım kalan bir işi 10 dk ilerlet">
+      </div>
+      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
+        <div class="text-sm text-slate-400">Ritüel</div>
+        <input id="ritual" class="mt-2 w-full rounded bg-white/5 border border-white/10 px-3 py-2" placeholder="3 dk nefes + sıcak duş + şükür">
+      </div>
+    </div>
 
-      <section class="panel">
-        <h3>Çıktı</h3>
-        <div class="note">3 maddelik mikro aksiyon listesi:</div>
-        <ol id="planList" style="margin-top:10px"></ol>
-      </section>
+    <div class="mt-6 grid md:grid-cols-2 gap-6">
+      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-slate-400">Alışkanlıklar</div>
+          <button id="addHabit" class="text-xs px-2 py-1 rounded bg-white/10 hover:bg-white/15">+ Ekle</button>
+        </div>
+        <ul id="habitList" class="mt-2 space-y-2"></ul>
+      </div>
+
+      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
+        <div class="text-sm text-slate-400">Notlar</div>
+        <textarea id="notes" rows="6" class="mt-2 w-full rounded bg-white/5 border border-white/10 px-3 py-2" placeholder="Gözlemler, duygular, tekrar eden semboller…"></textarea>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center gap-3">
+      <button id="saveBtn" class="rounded-md bg-cyan-300 px-4 py-2 text-slate-900 font-semibold hover:bg-cyan-200">Kaydet</button>
+      <span id="saved" class="text-sm text-slate-400 hidden">Kaydedildi ✓</span>
     </div>
   </div>
 
   <script>
-    // Basit yerel örnek (sonra AI endpoint’i ile değiştirebiliriz)
-    const $ = s => document.querySelector(s);
-    $("#planBtn").addEventListener("click", () => {
-      const focus = $("#focus").value.trim() || "Genel";
-      const notes = $("#notes").value.trim();
-      const ideas = [
-        `• ${focus} için 10 dakikalık tek iş odak bloğu başlat.`,
-        "• 5 dakikalık nefes/niyet: rüyadaki duyguyu kabul et, günün tonunu ayarla.",
-        "• Birine küçük bir teşekkür/mesaj; ilişki enerjisini akıt.",
-        "• 15 dakikalık düzenleme/temizlik: zihni boşalt, alan aç.",
-        "• Kısa yürüyüş + müzik: yaratıcı içgüdüyü tetikle."
-      ];
-      const out = [ideas[0], ideas[1], ideas[2]];
-      $("#planList").innerHTML = out.map(i => `<li>${i}</li>`).join("");
-      $("#msg").textContent = notes ? "Notlar işlendi." : "";
-    });
+    const q = id => document.getElementById(id);
+    const keys = ['theme','step','ritual','notes'];
+
+    // localStorage load
+    keys.forEach(k=>{ const v=localStorage.getItem('coach_'+k); if(v) q(k).value=v; });
+
+    const habitList = q('habitList');
+    const save = ()=>{
+      keys.forEach(k=>localStorage.setItem('coach_'+k,q(k).value));
+      const habits=[...habitList.querySelectorAll('input[type="checkbox"]')].map(cb=>({t:cb.nextSibling.textContent.trim(), c:cb.checked}));
+      localStorage.setItem('coach_habits', JSON.stringify(habits));
+      q('saved').classList.remove('hidden');
+      setTimeout(()=>q('saved').classList.add('hidden'), 1200);
+    };
+    q('saveBtn').onclick = save;
+    keys.forEach(k=>q(k).addEventListener('change', save));
+
+    // habits
+    function renderHabits(){
+      habitList.innerHTML='';
+      const items = JSON.parse(localStorage.getItem('coach_habits')||'[]');
+      items.forEach((h,i)=>{
+        const li=document.createElement('li');
+        li.className='flex items-center gap-2';
+        li.innerHTML = `<input type="checkbox" ${h.c?'checked':''} class="accent-cyan-300">
+                        <span class="flex-1">${h.t}</span>
+                        <button class="text-xs text-rose-300 hover:underline">Sil</button>`;
+        li.querySelector('input').addEventListener('change', save);
+        li.querySelector('button').addEventListener('click', ()=>{items.splice(i,1); localStorage.setItem('coach_habits',JSON.stringify(items)); renderHabits();});
+        habitList.appendChild(li);
+      });
+    }
+    renderHabits();
+
+    q('addHabit').onclick = ()=>{
+      const t=prompt('Alışkanlık: (ör. 10 dk yürüyüş)');
+      if(!t) return;
+      const items=JSON.parse(localStorage.getItem('coach_habits')||'[]');
+      items.push({t, c:false});
+      localStorage.setItem('coach_habits', JSON.stringify(items));
+      renderHabits();
+    };
   </script>
 </body>
 </html>
