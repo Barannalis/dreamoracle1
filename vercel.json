@@ -1,6 +1,19 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/public/index.html" },
-    { "source": "/(.*)", "destination": "/public/$1" }
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)\\.(css|js|svg|png|jpg|webp)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ],
+  "routes": [
+    { "src": "/$", "dest": "/index.html" },
+    { "src": "/iletisim", "dest": "/contact.html" },
+    { "src": "/premium", "dest": "/premium.html" },
+    { "src": "/stüdyo", "dest": "/studio.html" },
+    { "src": "/kocluk", "dest": "/coach.html" }
   ]
-} 
+}
