@@ -1,94 +1,131 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rüyanı Gönder • DreamOracle</title>
-  <link rel="canonical" href="https://dreamoracle.space/contact.html">
-  <link rel="icon" href="/favicon.svg" />
-  <style>
-    body{margin:0;background:#0b1220;color:#e8f1ff;font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif}
-    .wrap{max-width:960px;margin:0 auto;padding:24px}
-    .nav{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-bottom:18px}
-    .brand{margin-right:auto;font-weight:700}
-    .panel{background:#0f1a2f;border:1px solid #13233f;border-radius:16px;padding:18px}
-    label{display:block;margin:8px 0 6px}
-    input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #29486d;background:#0c1424;color:#e8f1ff}
-    button{margin-top:14px;background:linear-gradient(90deg,#3da1ff,#9ad1ff);border:0;color:#08101f;font-weight:700;padding:12px 16px;border-radius:12px;cursor:pointer}
-    .note{margin-top:10px;color:#8aa4c8}
-    a{color:#9ad1ff;text-decoration:none}
-    a:hover{text-decoration:underline}
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rüya Gönder – DreamOracle</title>
+  <link rel="icon" href="/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{font-family:Inter,system-ui}</style>
 </head>
-<body>
-  <div class="wrap">
-    <nav class="nav">
-      <div class="brand">DreamOracle</div>
-      <a href="/index.html">Anasayfa</a>
-      <a href="/coach.html">Koçluk</a>
-      <a href="/contact.html">İletişim</a>
-    </nav>
+<body class="min-h-screen bg-slate-950 text-slate-200">
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <a href="/" class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200">
+      <i class="ri-arrow-left-line"></i> Anasayfa
+    </a>
 
-    <h1>Rüyanı Gönder</h1>
-    <p class="note">Formu doldur; e-postana dönüş yapalım. İstersen Premium seçip yaşam koçluğu bağlamında yorumlansın.</p>
+    <h1 class="mt-4 text-3xl font-extrabold">Rüyanı Gönder</h1>
+    <p class="mt-2 text-slate-400">Formu doldur; e-postana dönüş yapalım. İstersen Premium koçluk iste.</p>
 
-    <form class="panel" id="dreamForm">
-      <label>Ad Soyad</label>
-      <input id="name" placeholder="Ad Soyad" required />
-      <label>E-posta</label>
-      <input id="email" type="email" placeholder="ornek@mail.com" required />
-      <label>Paket</label>
-      <select id="package">
-        <option>Standart Rüya Yorumu (ücretsiz)</option>
-        <option>Premium Yorum + Koçluk</option>
-      </select>
-      <label>Öncelik</label>
-      <select id="priority">
-        <option>Genel yorum</option>
-        <option>Kariyer / Para</option>
-        <option>İlişkiler</option>
-        <option>Sağlık / Enerji</option>
-      </select>
-      <label>Rüyanız</label>
-      <textarea id="dream" rows="8" placeholder="Rüyanı mümkün olduğunca detaylı yaz..." required></textarea>
+    <form id="dreamForm" class="mt-6 space-y-4">
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm text-slate-400">Ad Soyad</label>
+          <input id="name" required class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2" placeholder="Ali Baran Üzümcü">
+        </div>
+        <div>
+          <label class="text-sm text-slate-400">E-posta</label>
+          <input id="email" required type="email" class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2" placeholder="ornek@mail.com">
+        </div>
+      </div>
 
-      <button type="submit">Gönder →</button>
-      <div class="note" id="msg"></div>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm text-slate-400">Paket</label>
+          <select id="package" class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2">
+            <option value="Standart">Standart Yorum (Ücretsiz)</option>
+            <option value="Premium">Premium Yorum + Koçluk</option>
+            <option value="Ekstra">Tarot / Kahve / Yıldız</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-slate-400">Öncelik</label>
+          <select id="priority" class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2">
+            <option>Genel yorum</option>
+            <option>İş/Kariyer</option>
+            <option>İlişki</option>
+            <option>Sağlık/Rutin</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-slate-400">Rüyan</label>
+        <textarea id="dream" required rows="8" class="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2" placeholder="Detaylı yaz: yerler, kişiler, hisler, tekrar eden semboller…"></textarea>
+      </div>
+
+      <!-- honeypot -->
+      <input id="website" class="hidden" autocomplete="off">
+
+      <div id="status" class="hidden rounded-md border px-3 py-2 text-sm"></div>
+
+      <button id="submitBtn" class="w-full sm:w-auto inline-flex items-center gap-2 rounded-md bg-cyan-300 px-5 py-2.5 text-slate-900 font-semibold hover:bg-cyan-200">
+        <i class="ri-send-plane-fill"></i> Gönder
+      </button>
     </form>
+
+    <p class="mt-6 text-xs text-slate-500">
+      Verilerin yalnızca yanıt oluşturmak için kullanılır, kaydedilmez.
+    </p>
   </div>
 
   <script>
-    // mevcut API endpoint'in değişmediyse olduğu gibi bırak.
-    const ENDPOINT = "/api/send-email";
-    const form = document.getElementById('dreamForm');
-    const msg = document.getElementById('msg');
+    // URL parametresi ile paket seçimi
+    const params=new URLSearchParams(location.search);
+    if(params.get('paket')) document.getElementById('package').value =
+      params.get('paket').toLowerCase()==='premium' ? 'Premium'
+    : params.get('paket').toLowerCase()==='ekstra' ? 'Ekstra' : 'Standart';
 
-    form.addEventListener('submit', async (e) => {
+    const form = document.getElementById('dreamForm');
+    const statusBox = document.getElementById('status');
+    const btn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      msg.textContent = "Gönderiliyor…";
+      // basit anti-bot
+      if(document.getElementById('website').value) return;
 
       const payload = {
         name: document.getElementById('name').value.trim(),
         email: document.getElementById('email').value.trim(),
         pkg: document.getElementById('package').value,
         priority: document.getElementById('priority').value,
-        dream: document.getElementById('dream').value.trim(),
-        source: "https://dreamoracle.space/contact.html"
+        message: document.getElementById('dream').value.trim()
       };
 
-      try {
-        const r = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+      // basit doğrulama
+      if(!payload.name || !payload.email || !payload.message){
+        showStatus('Lütfen tüm alanları doldur.', false); return;
+      }
+
+      btn.disabled = true; btn.innerHTML = 'Gönderiliyor…';
+
+      try{
+        const res = await fetch('/api/send-email', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
           body: JSON.stringify(payload)
         });
-        if (!r.ok) throw new Error("Sunucu hatası: " + r.status);
-        msg.textContent = "Rüyan ulaştı. E-postanı kontrol edebilirsin. 👍";
+        if(!res.ok) throw new Error('Sunucu hatası: '+res.status);
+        showStatus('Rüyan ulaştı. E-postanı kontrol edebilirsin. ✨', true);
         form.reset();
-      } catch (err) {
-        msg.textContent = "Hata: " + err.message;
+      }catch(err){
+        showStatus('Gönderilemedi: '+err.message, false);
+      }finally{
+        btn.disabled=false; btn.innerHTML='<i class="ri-send-plane-fill"></i> Gönder';
       }
     });
+
+    function showStatus(msg, ok){
+      statusBox.className =
+        "mt-3 rounded-md border px-3 py-2 text-sm " +
+        (ok ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300"
+            : "border-rose-400/40 bg-rose-400/10 text-rose-300");
+      statusBox.textContent = msg;
+      statusBox.classList.remove('hidden');
+    }
   </script>
 </body>
 </html>
