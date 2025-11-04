@@ -1,111 +1,218 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DreamOracle • Rüyalarından anlam çıkar</title>
-
-  <link rel="canonical" href="https://dreamoracle.space/">
-  <link rel="icon" href="/favicon.svg" />
-  <meta name="description" content="Rüyanı yaz, 24 saat içinde e-posta kutuna yorum gelsin. İstersen Premium paket ve koçluk ile günlük aksiyon planı al." />
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DreamOracle – Rüyalarından Yol Haritan Çıksın</title>
+  <meta name="description" content="Yapay zekâ ile rüyalarını yorumla, günlük planını çıkar, istersen tarot/kahve/yıldız falı ve yaşam koçluğu desteği al.">
+  <link rel="icon" href="/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root {
-      --bg:#0b1220; --panel:#0f1a2f; --muted:#8aa4c8; --text:#e8f1ff; --brand:#3da1ff; --brand2:#9ad1ff;
-      --ring:#29486d; --ok:#40c57a;
+    html,body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial}
+    /* arkaplan  */
+    .bg-oracle{
+      background:
+        radial-gradient(1200px 600px at 80% -20%, rgba(56,189,248,.15), transparent 50%),
+        radial-gradient(900px 500px at -10% 0%, rgba(167,139,250,.18), transparent 40%),
+        linear-gradient(180deg, #0B1220 0%, #060a13 100%);
     }
-    * { box-sizing: border-box; }
-    html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif; }
-    a { color:var(--brand2); text-decoration:none; }
-    a:hover { text-decoration:underline; }
-    .wrap { max-width:1080px; margin:0 auto; padding:24px; }
-    .nav { display:flex; gap:14px; align-items:center; justify-content:flex-end; margin-bottom:24px; }
-    .brand { margin-right:auto; font-weight:700; letter-spacing:.2px; }
-    .chip { font-size:12px; padding:2px 8px; border-radius:999px; background:#13233f; color:#b6cbf1; }
-    header.hero {
-      background: radial-gradient(1200px 400px at 20% 0%, rgba(61,161,255,.18), transparent),
-                  radial-gradient(900px 300px at 90% 0%, rgba(154,209,255,.12), transparent);
-      border-bottom:1px solid #111a2d;
-      padding:28px 0 6px;
-    }
-    h1 { font-size: clamp(28px, 4vw, 44px); line-height:1.15; margin:10px 0 14px; }
-    .lead { color:var(--muted); max-width:840px; }
-    .btn, .btn-secondary {
-      display:inline-flex; align-items:center; gap:10px; border-radius:12px; padding:12px 18px; font-weight:600;
-      border:1px solid transparent; cursor:pointer; text-decoration:none;
-    }
-    .btn { background:linear-gradient(90deg, var(--brand) 0%, var(--brand2) 100%); color:#08101f; }
-    .btn:hover { filter:brightness(1.05); }
-    .btn-secondary { background:transparent; color:var(--text); border-color:#23385b; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:16px; margin-top:28px; }
-    .card { background:var(--panel); border:1px solid #13233f; border-radius:16px; padding:16px; }
-    .muted { color:var(--muted); }
-    footer { border-top:1px solid #111a2d; margin-top:40px; }
-    .footer { display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; color:#9db4d9; }
+    /* basit fade-up animasyonu */
+    [data-animate]{opacity:0; transform:translateY(12px); transition:.5s ease}
+    [data-animate].in{opacity:1; transform:none}
+    /* cam kart */
+    .glass{background:rgba(255,255,255,.04); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,.06)}
   </style>
 </head>
-<body>
-  <header class="hero">
-    <div class="wrap">
-      <nav class="nav">
-        <div class="brand">DreamOracle <span class="chip">AI</span></div>
-        <a href="/index.html">Anasayfa</a>
-        <a href="/coach.html">Koçluk</a>
-        <a href="/contact.html">İletişim</a>
+<body class="bg-oracle text-slate-200">
+  <!-- NAV -->
+  <header class="sticky top-0 z-30 border-b border-white/5 bg-slate-900/50 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 font-semibold tracking-tight">
+        <span class="inline-flex h-8 w-8 rounded bg-cyan-400/20 text-cyan-300 items-center justify-center">
+          <i class="ri-moon-clear-fill"></i>
+        </span>
+        DreamOracle
+      </a>
+      <nav class="hidden sm:flex items-center gap-6 text-sm">
+        <a href="/#ozellikler" class="hover:text-white/90">Özellikler</a>
+        <a href="/#paketler" class="hover:text-white/90">Paketler</a>
+        <a href="/coach.html" class="hover:text-white/90">Günlük Plan</a>
+        <a href="/contact.html" class="inline-flex items-center gap-1 rounded-md px-3 py-2 text-slate-900 bg-cyan-300 font-medium hover:bg-cyan-200">
+          <i class="ri-send-plane-fill"></i> Rüya Gönder
+        </a>
       </nav>
-
-      <h1>Rüyalarından anlam çıkar. <span style="color:var(--brand2)">Hızlı</span>, <span style="color:var(--brand2)">güvenli</span>, <span style="color:var(--brand2)">kişisel</span>.</h1>
-      <p class="lead">Rüyanı yaz, 24 saat içinde e-postana yorum gelsin. İstersen Premium yorumla
-        bugünkü adımlarını netleştir; koçluk modülü ile günlük aksiyon planına dönüştür.</p>
-
-      <div style="display:flex; gap:12px; margin-top:18px">
-        <a class="btn" href="/contact.html">Hemen rüya gönder →</a>
-        <a class="btn-secondary" href="/coach.html">Koçluk & Günlük Plan</a>
-      </div>
-
-      <div class="grid">
-        <div class="card"><b>Hızlı Dönüş</b><br><span class="muted">Form ulaştıktan sonra saat başı kontrol. 24 saat içinde yanıt.</span></div>
-        <div class="card"><b>Net & Uygulanabilir</b><br><span class="muted">Sembolleri hedeflerinle eşleştirip küçük bir aksiyon listesi.</span></div>
-        <div class="card"><b>Gizlilik</b><br><span class="muted">Verilerin sadece çıktı üretmek için anlık kullanılır. Kayıt tutmayız.</span></div>
-      </div>
     </div>
   </header>
 
-  <main class="wrap">
-    <h2>Nasıl çalışır?</h2>
-    <ol class="muted">
-      <li>Rüyayı <a href="/contact.html">formdan</a> gönder.</li>
-      <li>Gerekiyorsa Premium paket seç ve koçluk talep et.</li>
-      <li>Yanıtların e-postana gelsin.</li>
-    </ol>
+  <!-- HERO -->
+  <section class="relative">
+    <div class="max-w-6xl mx-auto px-4 pt-20 pb-16">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div data-animate>
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs border border-white/10 mb-4">
+            <i class="ri-sparkling-2-line text-cyan-300"></i> Yeni: Premium Yorum + Yaşam Koçluğu
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">
+            Rüyalarından <span class="text-cyan-300">net aksiyonlar</span> çıkar.  
+            Hızlı, güvenli, kişisel.
+          </h1>
+          <p class="mt-4 text-slate-300/90 max-w-xl">
+            Rüyanı gönder, 24 saat içinde e-postana yorum gelsin. İstersen AI + koçluk ile
+            rüyadaki sembolleri günlük hedeflerinle eşleştirip bugünün adımlarını netleştir.
+            Tarot • Kahve • El & Yıldız falı modülleri hazır.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="/contact.html" class="inline-flex items-center gap-2 rounded-md px-4 py-3 bg-cyan-300 text-slate-900 font-semibold hover:bg-cyan-200">
+              <i class="ri-send-plane-fill"></i> Hemen rüya gönder
+            </a>
+            <a href="#paketler" class="inline-flex items-center gap-2 rounded-md px-4 py-3 border border-white/10 hover:bg-white/5">
+              <i class="ri-star-smile-line"></i> Premium paketleri gör
+            </a>
+          </div>
+          <div class="mt-6 flex items-center gap-4 text-sm text-slate-400">
+            <div class="flex items-center gap-2"><i class="ri-timer-flash-line text-cyan-300"></i> 24 saatte dönüş</div>
+            <div class="flex items-center gap-2"><i class="ri-shield-check-line text-cyan-300"></i> Verilerin gizli</div>
+          </div>
+        </div>
 
-    <div class="grid" style="margin-top:18px">
-      <div class="card">
-        <b>İletişim</b>
-        <p class="muted">Form üzerinden güvenli iletim. Gmail/Apps Script ya da FormRelay ile e-posta.</p>
-        <a href="/contact.html">Formu aç →</a>
-      </div>
-      <div class="card">
-        <b>Koçluk</b>
-        <p class="muted">Rüya temaları → günlük hedefler → bugün ne yapmalıyım akışı.</p>
-        <a href="/coach.html">Koçluk sayfası →</a>
-      </div>
-      <div class="card">
-        <b>SEO</b>
-        <p class="muted"><code>robots.txt</code> ve <code>sitemap.xml</code> hazır. Hafif ve hızlı sayfalar.</p>
+        <!-- görsel blok -->
+        <div class="relative" data-animate>
+          <div class="glass rounded-2xl p-6">
+            <div class="text-xs text-slate-400 mb-2">AI Rüya Özeti</div>
+            <div class="rounded-lg border border-white/10 p-4 bg-slate-900/40">
+              <p class="text-slate-200 leading-relaxed">
+                “Su ve köprü sembolleri → <span class="text-cyan-300">geçiş</span> ve <span class="text-cyan-300">temizlik</span>.  
+                Bugün: 10 dk nefes, 1 küçük adım (yarım bırakılan iş). Akşam:  
+                sıcak duş + 5 dk günün şükrü.”
+              </p>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-3">
+              <div class="glass rounded-lg p-3 text-center">
+                <div class="text-cyan-300 font-bold">Tarot</div>
+                <div class="text-xs text-slate-400">3 kart açılımı</div>
+              </div>
+              <div class="glass rounded-lg p-3 text-center">
+                <div class="text-cyan-300 font-bold">Kahve</div>
+                <div class="text-xs text-slate-400">simgesel analiz</div>
+              </div>
+              <div class="glass rounded-lg p-3 text-center">
+                <div class="text-cyan-300 font-bold">Yıldız</div>
+                <div class="text-xs text-slate-400">doğum haritası</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </main>
+  </section>
 
-  <footer>
-    <div class="wrap footer">
-      <div>© 2025 DreamOracle</div>
-      <div style="display:flex; gap:12px">
-        <a href="/">Ana sayfa</a>
-        <a href="/coach.html">Koçluk</a>
-        <a href="/contact.html">İletişim</a>
+  <!-- ÖZELLİKLER -->
+  <section id="ozellikler" class="py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold mb-6">Neden DreamOracle?</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="glass rounded-xl p-6" data-animate>
+          <i class="ri-magic-line text-2xl text-cyan-300"></i>
+          <h3 class="mt-3 font-semibold">AI + Koçluk Zinciri</h3>
+          <p class="text-slate-400 mt-1">Rüya sembollerini günlük hedeflerine bağlayan rehber zincir. “Şimdi ne yapmalıyım?” sorusuna net yanıt.</p>
+        </div>
+        <div class="glass rounded-xl p-6" data-animate>
+          <i class="ri-shield-keyhole-line text-2xl text-cyan-300"></i>
+          <h3 class="mt-3 font-semibold">Gizlilik & Güven</h3>
+          <p class="text-slate-400 mt-1">Verilerin sadece yanıt oluşturmak için işlenir. Kaydetmeyiz. İsteyenler takma adla kullanabilir.</p>
+        </div>
+        <div class="glass rounded-xl p-6" data-animate>
+          <i class="ri-rocket-line text-2xl text-cyan-300"></i>
+          <h3 class="mt-3 font-semibold">24 Saatte Geri Dönüş</h3>
+          <p class="text-slate-400 mt-1">Standart yorum 24 saat içinde e-postana gelir. Premium’da aynı gün koçluk planı eklenir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAKETLER -->
+  <section id="paketler" class="py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold mb-6">Paketler</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl p-6 flex flex-col" data-animate>
+          <div class="text-sm text-slate-400">Başlangıç</div>
+          <h3 class="text-xl font-semibold mt-1">Standart Yorum</h3>
+          <div class="mt-4 text-3xl font-extrabold">Ücretsiz</div>
+          <ul class="mt-4 space-y-2 text-slate-300">
+            <li>• AI rüya özeti</li>
+            <li>• 24 saat içinde e-posta</li>
+          </ul>
+          <a href="/contact.html" class="mt-6 inline-flex items-center justify-center gap-2 rounded-md px-4 py-3 bg-white/10 hover:bg-white/15">
+            Rüya gönder
+          </a>
+        </div>
+        <div class="glass ring-2 ring-cyan-300/50 rounded-2xl p-6 flex flex-col" data-animate>
+          <div class="text-sm text-cyan-300">En Popüler</div>
+          <h3 class="text-xl font-semibold mt-1">Premium Yorum + Koçluk</h3>
+          <div class="mt-4 text-3xl font-extrabold">₺ <span class="align-top text-xl">?</span></div>
+          <ul class="mt-4 space-y-2 text-slate-300">
+            <li>• Hedef odaklı aksiyon listesi</li>
+            <li>• 24 saat içinde dönüş</li>
+            <li>• 7 gün mikro takip</li>
+          </ul>
+          <a href="/contact.html?paket=premium" class="mt-6 inline-flex items-center justify-center gap-2 rounded-md px-4 py-3 bg-cyan-300 text-slate-900 font-semibold hover:bg-cyan-200">
+            Premium başlat
+          </a>
+        </div>
+        <div class="glass rounded-2xl p-6 flex flex-col" data-animate>
+          <div class="text-sm text-slate-400">Ekstra</div>
+          <h3 class="text-xl font-semibold mt-1">Tarot / Kahve / Yıldız</h3>
+          <div class="mt-4 text-3xl font-extrabold">₺ <span class="align-top text-xl">?</span></div>
+          <ul class="mt-4 space-y-2 text-slate-300">
+            <li>• 3 kart tarot + yorum</li>
+            <li>• Kahve telvesi simgesel analiz</li>
+            <li>• Mini doğum haritası teması</li>
+          </ul>
+          <a href="/contact.html?paket=ekstra" class="mt-6 inline-flex items-center justify-center gap-2 rounded-md px-4 py-3 bg-white/10 hover:bg-white/15">
+            İstek gönder
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6">
+      <div class="glass rounded-xl p-6" data-animate>
+        <p class="text-slate-300">“Rüyamdan ne yapacağımı çıkaramıyordum. 10 dakikalık aksiyon listesi hayat kurtardı.”</p>
+        <div class="mt-3 text-sm text-slate-400">— Zeynep Y.</div>
+      </div>
+      <div class="glass rounded-xl p-6" data-animate>
+        <p class="text-slate-300">“Tarot + koçluk kombinasyonu şaşırtıcı derecede netti. Takip mesajları motive etti.”</p>
+        <div class="mt-3 text-sm text-slate-400">— Mert A.</div>
+      </div>
+      <div class="glass rounded-xl p-6" data-animate>
+        <p class="text-slate-300">“Kahve falı sembollerinin günlük hedeflerle bağlanması çok hoşuma gitti.”</p>
+        <div class="mt-3 text-sm text-slate-400">— Selin K.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5">
+    <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-slate-400 flex flex-col sm:flex-row gap-4 justify-between">
+      <div>© 2025 DreamOracle • <a href="/contact.html" class="underline hover:text-slate-300">İletişim</a></div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-slate-300">Gizlilik</a>
+        <a href="#" class="hover:text-slate-300">Şartlar</a>
+        <a href="/sitemap.xml" class="hover:text-slate-300">Sitemap</a>
       </div>
     </div>
   </footer>
+
+  <script>
+    // basit görünme animasyonu
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target)}}),{threshold:.15});
+    document.querySelectorAll('[data-animate]').forEach(el=>io.observe(el));
+  </script>
 </body>
 </html>
