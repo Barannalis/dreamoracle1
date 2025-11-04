@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DreamOracle | AI Stüdyo – Rüya → Video</title>
+  <link rel="stylesheet" href="/styles.css?v=3" />
+</head>
+<body>
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/">DreamOracle</a>
+    <nav class="menu">
+      <a href="/">Anasayfa</a>
+      <a href="/readings.html">Fallar</a>
+      <a href="/coach.html">Koçluk</a>
+      <a href="/planner.html">Planlayıcı</a>
+      <a href="/contact.html" class="btn btn-primary">İletişim</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>AI Stüdyo — <span class="accent">Rüyanı videoya dönüştürelim</span></h1>
+    <p class="lead">Rüyanı yaz, stil seç, sana özel bir kısa video üretelim. İlk sürümde istekler mailine düşer.</p>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <form id="aiForm" class="card" style="max-width:820px;margin:auto;">
+      <div class="grid" style="grid-template-columns:1fr 1fr;">
+        <div>
+          <label>Ad Soyad</label>
+          <input type="text" id="name" placeholder="Adın" required>
+        </div>
+        <div>
+          <label>E-posta</label>
+          <input type="email" id="email" placeholder="ornek@mail.com" required>
+        </div>
+      </div>
+      <div style="margin-top:10px;">
+        <label>Rüyan</label>
+        <textarea id="dream" rows="6" placeholder="Rüyanı mümkün olduğunca detaylı yaz..." required></textarea>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr 1fr; margin-top:10px;">
+        <div>
+          <label>Stil</label>
+          <select id="style">
+            <option value="sinema">Sinematik</option>
+            <option value="animasyon">Animasyon</option>
+            <option value="soyut">Soyut</option>
+            <option value="gercekci">Gerçekçi</option>
+          </select>
+        </div>
+        <div>
+          <label>Uzunluk</label>
+          <select id="duration">
+            <option value="15">~15 sn</option>
+            <option value="30">~30 sn</option>
+            <option value="45">~45 sn</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <button class="btn btn-primary" type="submit">İsteği Gönder →</button>
+      </div>
+      <div id="note" class="card" style="margin-top:12px;display:none;"></div>
+    </form>
+  </div>
+</section>
+
+<script>
+const el = (id)=>document.getElementById(id);
+const note = el('note');
+
+document.getElementById('aiForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  note.style.display='none';
+
+  const payload = {
+    SERVICE_TYPE: 'AI_VIDEO',
+    name: el('name').value.trim(),
+    email: el('email').value.trim(),
+    dream: el('dream').value.trim(),
+    style: el('style').value,
+    duration: el('duration').value
+  };
+
+  const res = await fetch('/api/send-email', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      subject: `AI Video İsteği – ${payload.name}`,
+      body: `AI Stüdyo Talebi:\n\nAd: ${payload.name}\nE-posta: ${payload.email}\nStil: ${payload.style}\nSüre: ${payload.duration} sn\n\nRüya:\n${payload.dream}`,
+      to: payload.email
+    })
+  });
+
+  const ok = res.ok;
+  note.style.display='block';
+  note.textContent = ok ? 'İsteğin alındı. E-postanı kontrol edebilirsin.' : 'Sunucu cevap vermedi. Lütfen tekrar dene.';
+});
+</script>
+</body>
+</html>
