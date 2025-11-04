@@ -1,87 +1,70 @@
-<!doctype html>
-<html lang="tr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DreamOracle | Yaşam Koçluğu</title>
-  <link rel="stylesheet" href="/styles.css?v=3" />
-</head>
-<body>
-<header class="nav">
-  <div class="container nav-inner">
-    <a class="brand" href="/">DreamOracle</a>
-    <nav class="menu">
-      <a href="/ai-studio.html">AI Stüdyo</a>
-      <a href="/readings.html">Fallar</a>
-      <a href="/planner.html">Planlayıcı</a>
-      <a href="/contact.html" class="btn btn-primary">İletişim</a>
-    </nav>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="container">
-    <h1>Yaşam Koçluğu — <span class="accent">Hedef → Aksiyon</span></h1>
-    <p class="lead">Hedeflerini yaz, mevcut bariyerlerini belirt; ilk yol haritan e-postana gelsin.</p>
-  </div>
-</section>
-
-<section class="features">
-  <div class="container">
-    <form id="coachForm" class="card" style="max-width:820px;margin:auto;">
-      <div class="grid" style="grid-template-columns:1fr 1fr;">
+<!doctype html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DreamOracle – Günlük Plan</title>
+<link rel="icon" href="/favicon.svg">
+<style>
+  body{margin:0;background:#0c1424;color:#e8f1ff;font:16px/1.6 Inter,system-ui,sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:28px 20px}
+  a{color:#e8f1ff;text-decoration:none}
+  .panel{background:#101a2e;border:1px solid #1c2a46;border-radius:16px;padding:18px;margin-top:16px}
+  label{display:block;margin:8px 0 4px;color:#a8b6cb}
+  input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #29406d;background:#0f1a2f;color:#e8f1ff}
+  textarea{min-height:120px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .btn{margin-top:12px;background:#1b2a48;border:1px solid #29406d;border-radius:10px;color:#fff;padding:10px 14px;cursor:pointer}
+  .success,.warn{display:none;margin-top:10px;padding:10px;border-radius:10px}
+  .success{background:#0d2a19;border:1px solid #1a7b4b;color:#b7ffd8}
+  .warn{background:#2a140f;border:1px solid #7b3c1a;color:#ffd0b7}
+</style></head><body>
+  <div class="wrap">
+    <p><a href="/">← Anasayfa</a></p>
+    <h1>Günlük Plan & Koçluk</h1>
+    <section class="panel">
+      <div class="row">
         <div>
           <label>Ad Soyad</label>
-          <input type="text" id="name" required>
+          <input id="c-name" placeholder="Adın Soyadın">
         </div>
         <div>
           <label>E-posta</label>
-          <input type="email" id="email" required>
+          <input id="c-email" placeholder="ornek@mail.com">
         </div>
       </div>
-      <div style="margin-top:10px;">
-        <label>Hedeflerin (3 madde)</label>
-        <textarea id="goals" rows="4" placeholder="- ...\n- ...\n- ..." required></textarea>
-      </div>
-      <div style="margin-top:10px;">
-        <label>Bariyerler / Zorluklar</label>
-        <textarea id="barriers" rows="3" placeholder="Zaman, motivasyon, kaynak vb."></textarea>
-      </div>
-      <div style="margin-top:10px;">
-        <label>Alışkanlıklar (varsa)</label>
-        <input type="text" id="habits" placeholder="Örn. her sabah yürüyüş, haftada 3 gün spor">
-      </div>
-      <div style="margin-top:14px;">
-        <button class="btn btn-primary" type="submit">Başvuruyu Gönder →</button>
-      </div>
-      <div id="note" class="card" style="margin-top:12px;display:none;"></div>
-    </form>
+      <label>Bugünün 1-3 ana hedefi</label>
+      <input id="c-goals" placeholder="Örn. X sunumu, 30 dk yürüyüş, 15 dk meditasyon">
+      <label>Rüyadan çıkan ipuçları (opsiyonel)</label>
+      <textarea id="c-dream" placeholder="Tekrar eden sembol/duygu/tema?"></textarea>
+      <label>Notlar & esneklik</label>
+      <textarea id="c-notes" placeholder="Örn. 13:30 toplantı, akşam esneme"></textarea>
+      <button class="btn" onclick="submitCoach()">Planı oluştur (e-posta gönder)</button>
+      <div class="success" id="c-ok">Plan iletildi. E-posta kutunu kontrol et. ✅</div>
+      <div class="warn" id="c-err">Sunucu cevap vermedi. Lütfen tekrar dene.</div>
+    </section>
   </div>
-</section>
 
 <script>
-const el=(id)=>document.getElementById(id); const note=el('note');
-document.getElementById('coachForm').addEventListener('submit', async (e)=>{
-  e.preventDefault(); note.style.display='none';
-  const p = {
-    SERVICE_TYPE:'COACHING',
-    name: el('name').value.trim(),
-    email: el('email').value.trim(),
-    goals: el('goals').value.trim(),
-    barriers: el('barriers').value.trim(),
-    habits: el('habits').value.trim()
-  };
-  const res = await fetch('/api/send-email', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      subject:`Koçluk Başvurusu – ${p.name}`,
-      body:`Ad: ${p.name}\nE-posta: ${p.email}\n\nHedefler:\n${p.goals}\n\nBariyerler:\n${p.barriers}\n\nAlışkanlıklar:\n${p.habits}`,
-      to: p.email
-    })
-  });
-  note.style.display='block';
-  note.textContent = res.ok ? 'Başvurun alındı. E-postanı kontrol edebilirsin.' : 'Sunucu cevap vermedi. Lütfen tekrar dene.';
-});
+async function submitCoach(){
+  try{
+    const res = await fetch('/api/send-email',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        subject:'[DreamOracle] Günlük Plan Talebi',
+        name:document.getElementById('c-name').value.trim(),
+        email:document.getElementById('c-email').value.trim(),
+        message:
+`Hedefler: ${document.getElementById('c-goals').value.trim()}
+Rüya ipuçları: ${document.getElementById('c-dream').value.trim()}
+Notlar: ${document.getElementById('c-notes').value.trim()}`
+      })
+    });
+    const ok = res.ok;
+    document.getElementById('c-ok').style.display = ok?'block':'none';
+    document.getElementById('c-err').style.display = ok?'none':'block';
+  }catch(e){
+    document.getElementById('c-ok').style.display='none';
+    document.getElementById('c-err').style.display='block';
+  }
+}
 </script>
-</body>
-</html>
+</body></html>
