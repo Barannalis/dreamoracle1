@@ -3,74 +3,109 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DreamOracle – Rüyalarından anlam çıkar</title>
-  <link rel="icon" href="/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>DreamOracle • Rüyalarından anlam çıkar</title>
+
+  <link rel="canonical" href="https://dreamoracle.space/">
+  <link rel="icon" href="/favicon.svg" />
+  <meta name="description" content="Rüyanı yaz, 24 saat içinde e-posta kutuna yorum gelsin. İstersen Premium paket ve koçluk ile günlük aksiyon planı al." />
+
   <style>
-    :root { --bg:#0c1424; --panel:#101a2e; --muted:#7f8ea3; --brand:#4cc3ff; --text:#e8f1ff; }
-    *{box-sizing:border-box} body{margin:0;font:16px/1.6 Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
-    .nav{position:sticky;top:0;backdrop-filter:saturate(140%) blur(8px);background:rgba(16,26,46,.75);border-bottom:1px solid #1c2a46}
-    .wrap{max-width:1080px;margin:0 auto;padding:16px 20px}
-    .row{display:flex;gap:18px;align-items:center;justify-content:space-between}
-    a{color:var(--text);text-decoration:none}
-    .menu a{opacity:.9} .menu a:hover{color:var(--brand)}
-    .hero{padding:72px 20px 32px}
-    h1{font-size:44px;line-height:1.15;margin:0 0 12px}
-    .lead{color:var(--muted);max-width:780px}
-    .cta{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
-    .btn{background:#1b2a48;color:#fff;padding:12px 16px;border:1px solid #29406d;border-radius:10px}
-    .btn.brand{background:linear-gradient(135deg,#00b7ff,#4cc3ff);border:none;color:#00121f}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:36px 0}
-    .card{background:var(--panel);border:1px solid #1c2a46;border-radius:16px;padding:18px}
-    .card h3{margin:4px 0 6px}
-    footer{border-top:1px solid #1c2a46;margin-top:40px;color:var(--muted);font-size:14px}
+    :root {
+      --bg:#0b1220; --panel:#0f1a2f; --muted:#8aa4c8; --text:#e8f1ff; --brand:#3da1ff; --brand2:#9ad1ff;
+      --ring:#29486d; --ok:#40c57a;
+    }
+    * { box-sizing: border-box; }
+    html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif; }
+    a { color:var(--brand2); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .wrap { max-width:1080px; margin:0 auto; padding:24px; }
+    .nav { display:flex; gap:14px; align-items:center; justify-content:flex-end; margin-bottom:24px; }
+    .brand { margin-right:auto; font-weight:700; letter-spacing:.2px; }
+    .chip { font-size:12px; padding:2px 8px; border-radius:999px; background:#13233f; color:#b6cbf1; }
+    header.hero {
+      background: radial-gradient(1200px 400px at 20% 0%, rgba(61,161,255,.18), transparent),
+                  radial-gradient(900px 300px at 90% 0%, rgba(154,209,255,.12), transparent);
+      border-bottom:1px solid #111a2d;
+      padding:28px 0 6px;
+    }
+    h1 { font-size: clamp(28px, 4vw, 44px); line-height:1.15; margin:10px 0 14px; }
+    .lead { color:var(--muted); max-width:840px; }
+    .btn, .btn-secondary {
+      display:inline-flex; align-items:center; gap:10px; border-radius:12px; padding:12px 18px; font-weight:600;
+      border:1px solid transparent; cursor:pointer; text-decoration:none;
+    }
+    .btn { background:linear-gradient(90deg, var(--brand) 0%, var(--brand2) 100%); color:#08101f; }
+    .btn:hover { filter:brightness(1.05); }
+    .btn-secondary { background:transparent; color:var(--text); border-color:#23385b; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:16px; margin-top:28px; }
+    .card { background:var(--panel); border:1px solid #13233f; border-radius:16px; padding:16px; }
+    .muted { color:var(--muted); }
+    footer { border-top:1px solid #111a2d; margin-top:40px; }
+    .footer { display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; color:#9db4d9; }
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <div class="wrap row">
-      <a href="/">DreamOracle</a>
-      <div class="menu row">
-        <a href="/premium">Premium</a>
-        <a href="/studio">Stüdyo</a>
-        <a href="/coach">Koçluk</a>
-        <a href="/contact">İletişim</a>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="nav">
+        <div class="brand">DreamOracle <span class="chip">AI</span></div>
+        <a href="/index.html">Anasayfa</a>
+        <a href="/coach.html">Koçluk</a>
+        <a href="/contact.html">İletişim</a>
+      </nav>
+
+      <h1>Rüyalarından anlam çıkar. <span style="color:var(--brand2)">Hızlı</span>, <span style="color:var(--brand2)">güvenli</span>, <span style="color:var(--brand2)">kişisel</span>.</h1>
+      <p class="lead">Rüyanı yaz, 24 saat içinde e-postana yorum gelsin. İstersen Premium yorumla
+        bugünkü adımlarını netleştir; koçluk modülü ile günlük aksiyon planına dönüştür.</p>
+
+      <div style="display:flex; gap:12px; margin-top:18px">
+        <a class="btn" href="/contact.html">Hemen rüya gönder →</a>
+        <a class="btn-secondary" href="/coach.html">Koçluk & Günlük Plan</a>
+      </div>
+
+      <div class="grid">
+        <div class="card"><b>Hızlı Dönüş</b><br><span class="muted">Form ulaştıktan sonra saat başı kontrol. 24 saat içinde yanıt.</span></div>
+        <div class="card"><b>Net & Uygulanabilir</b><br><span class="muted">Sembolleri hedeflerinle eşleştirip küçük bir aksiyon listesi.</span></div>
+        <div class="card"><b>Gizlilik</b><br><span class="muted">Verilerin sadece çıktı üretmek için anlık kullanılır. Kayıt tutmayız.</span></div>
       </div>
     </div>
-  </nav>
+  </header>
 
   <main class="wrap">
-    <section class="hero">
-      <h1>Rüyalarından anlam çıkar. <span style="color:var(--brand)">Hızlı, güvenli, kişisel.</span></h1>
-      <p class="lead">Rüyanı yaz, 24 saat içinde e-postana yorum gelsin. Premium ile tarot/kahve/el & yıldız falı ve <b>rüyadan video</b> gibi ekstralara geç. Yaşam koçluğu ile bugünden aksiyona dönüştür.</p>
-      <div class="cta">
-        <a class="btn brand" href="/contact">Hemen rüya gönder →</a>
-        <a class="btn" href="/premium">Premium paketler</a>
-        <a class="btn" href="/studio">Rüyadan video</a>
-        <a class="btn" href="/coach">Günlük plan</a>
-      </div>
-    </section>
+    <h2>Nasıl çalışır?</h2>
+    <ol class="muted">
+      <li>Rüyayı <a href="/contact.html">formdan</a> gönder.</li>
+      <li>Gerekiyorsa Premium paket seç ve koçluk talep et.</li>
+      <li>Yanıtların e-postana gelsin.</li>
+    </ol>
 
-    <section class="grid">
-      <article class="card">
-        <h3>✓ Hızlı dönüş</h3>
-        <p>Form ulaştığında saat başı kontrol: 24 saat içinde yanıt.</p>
-      </article>
-      <article class="card">
-        <h3>✓ Net, uygulanabilir</h3>
-        <p>Yorum → küçük aksiyon listesi: Bugün ne yapmalıyım?</p>
-      </article>
-      <article class="card">
-        <h3>✓ Güvenli</h3>
-        <p>Verileri sadece yanıt üretmek için işleriz; kayıt tutmayız.</p>
-      </article>
-    </section>
+    <div class="grid" style="margin-top:18px">
+      <div class="card">
+        <b>İletişim</b>
+        <p class="muted">Form üzerinden güvenli iletim. Gmail/Apps Script ya da FormRelay ile e-posta.</p>
+        <a href="/contact.html">Formu aç →</a>
+      </div>
+      <div class="card">
+        <b>Koçluk</b>
+        <p class="muted">Rüya temaları → günlük hedefler → bugün ne yapmalıyım akışı.</p>
+        <a href="/coach.html">Koçluk sayfası →</a>
+      </div>
+      <div class="card">
+        <b>SEO</b>
+        <p class="muted"><code>robots.txt</code> ve <code>sitemap.xml</code> hazır. Hafif ve hızlı sayfalar.</p>
+      </div>
+    </div>
   </main>
 
-  <footer class="wrap" style="padding:18px 20px 40px">
-    © 2025 DreamOracle · <a href="/contact">İletişim</a>
+  <footer>
+    <div class="wrap footer">
+      <div>© 2025 DreamOracle</div>
+      <div style="display:flex; gap:12px">
+        <a href="/">Ana sayfa</a>
+        <a href="/coach.html">Koçluk</a>
+        <a href="/contact.html">İletişim</a>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
