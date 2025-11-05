@@ -110,31 +110,26 @@
   </div>
 
   <script>
-    // ——— Yardımcılar
     const $ = s => document.querySelector(s);
     const params = new URLSearchParams(location.search);
     const map = (v, dict, dft) => dict[v] ?? dft;
 
-    // URL → form ön-seçimler
-    const paketQS    = (params.get('paket')    || '').toLowerCase();  // standart | premium | mistik
-    const kategoriQS = (params.get('kategori') || '').toLowerCase();  // ruya | tarot | kahve | yildiz | kocluk
-    const priorityQS = (params.get('oncelik')  || '').toLowerCase();  // genel | is | iliski | saglik
+    const paketQS    = (params.get('paket')    || '').toLowerCase();
+    const kategoriQS = (params.get('kategori') || '').toLowerCase();
+    const priorityQS = (params.get('oncelik')  || '').toLowerCase();
 
     $('#paket').value    = map(paketQS,    {standart:'standart', premium:'premium', mistik:'mistik'}, 'standart');
     $('#kategori').value = map(kategoriQS, {ruya:'ruya', tarot:'tarot', kahve:'kahve', yildiz:'yildiz', kocluk:'kocluk'}, '');
     $('#priority').value = map(priorityQS, {genel:'genel', is:'is', iliski:'iliski', saglik:'saglik'}, 'genel');
 
-    // Görsel etiket
     const pill = $('#labelPill');
     const pillParts = [];
     if (paketQS)    pillParts.push(`paket: ${paketQS}`);
     if (kategoriQS) pillParts.push(`kategori: ${kategoriQS}`);
     if (pillParts.length) pill.textContent = pillParts.join(' • ');
 
-    // API endpoint (aynı projede göreceli path)
     const API_URL = '/api/send-email';
 
-    // Submit
     $('#dreamForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       $('#noteOk').style.display = 'none';
@@ -167,7 +162,7 @@
 
         $('#noteOk').style.display = 'block';
         $('#dreamForm').reset();
-        // URL’den gelen etiketleri koru
+        // URL ön-seçimlerini koru
         $('#paket').value    = map(paketQS,    {standart:'standart', premium:'premium', mistik:'mistik'}, 'standart');
         $('#kategori').value = map(kategoriQS, {ruya:'ruya', tarot:'tarot', kahve:'kahve', yildiz:'yildiz', kocluk:'kocluk'}, '');
         $('#priority').value = map(priorityQS, {genel:'genel', is:'is', iliski:'iliski', saglik:'saglik'}, 'genel');
