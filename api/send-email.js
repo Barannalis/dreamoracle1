@@ -1,6 +1,6 @@
 // api/send-email.js
-// Vercel Node runtime'ı SÜRÜMLÜ olmalı
-export const config = { runtime: 'nodejs20.x' };
+// Not: Vercel Node Functions için dosya içinden "nodejs" demeliyiz (sürüm yok).
+export const config = { runtime: 'nodejs' };
 
 export default async function handler(req, res) {
   // Basit CORS
@@ -9,7 +9,6 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
-
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
@@ -23,10 +22,13 @@ export default async function handler(req, res) {
       });
     }
 
-    // GAS Web App URL (Vercel env'de GAS_RELAY_URL olarak eklenmiş olmalı)
-    const relayUrl =
-      process.env.GAS_RELAY_URL ||
-      'https://script.google.com/macros/s/PASTE_YOUR_GAS_WEB_APP_URL/exec';
+    const relayUrl = process.env.GAS_RELAY_URL; // Vercel → Env Vars
+    if (!relayUrl) {
+      return res.status(500).json({
+        ok: false,
+        error: 'GAS_RELAY_URL ortam değişkeni tanımlı değil.'
+      });
+    }
 
     const payload = {
       name,
@@ -46,8 +48,7 @@ export default async function handler(req, res) {
     });
 
     const text = await r.text();
-    let data;
-    try { data = JSON.parse(text); } catch { data = { raw: text }; }
+    let data; try { data = JSON.parse(text); } catch { data = { raw: text }; }
 
     if (!r.ok || data?.ok === false) {
       return res.status(502).json({
