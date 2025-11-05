@@ -2,194 +2,178 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rüyanı Gönder • DreamOracle</title>
-  <meta name="description" content="Rüyanı yaz, 24 saat içinde e-postana yorum gelsin. Premium paketle koçluk ve aksiyon listesi.">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rüyanı Gönder | DreamOracle</title>
   <link rel="icon" href="/favicon.svg" />
   <style>
     :root{
-      --bg:#0b1424;--card:#0f1a2f;--muted:#8ea6c0;--accent:#4cc3ff;--accent2:#00d1ff;--ok:#18c37e;--warn:#ffc23d;--err:#ff6b6b;
+      --bg:#0b1220; --card:#0f1b2d; --muted:#9fb3c8; --text:#e6f1ff; --brand:#57c1ff; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:#e8f1ff;font:16px/1.6 Inter,system-ui,sans-serif}
-    a{color:#e8f1ff;text-decoration:none}
-    .wrap{max-width:1000px;margin:32px auto;padding:0 20px}
-    .nav{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
-    .brand-badge{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#001229;font-weight:900}
-    .card{background:var(--card);border:1px solid #29486d;border-radius:16px;padding:22px}
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:22px}
-    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
-    label{display:block;margin:10px 0 6px;color:#b9cee4;font-weight:600}
-    input,select,textarea{
-      width:100%;padding:12px 14px;border-radius:10px;border:1px solid #29486d;background:#0c162b;color:#e8f1ff
-    }
-    textarea{min-height:160px;resize:vertical}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:12px;border:1px solid #2b7bbd;background:linear-gradient(180deg,#109be0,#0f7ac1);color:#fff;cursor:pointer}
-    .btn:hover{filter:brightness(1.07)}
-    .muted{color:var(--muted)}
-    .caps{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#9bb7d6}
-    .hint{font-size:14px;color:#b9cee4}
-    .callout{border:1px solid #2a4060;border-radius:12px;padding:12px 14px;margin-top:14px}
-    .callout.ok{background:#0e2a22;border-color:#12624a;color:#a8f4d7}
-    .callout.err{background:#2a1212;border-color:#7a2b2b;color:#ffb0b0}
-    .badges{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 0}
-    .badge{font-size:12px;border:1px solid #2a4060;border-radius:999px;padding:4px 10px;color:#c9dbef;background:#0d1930}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue",Arial}
+    a{color:var(--brand);text-decoration:none}
+    .wrap{max-width:960px;margin:40px auto;padding:0 20px}
+    .panel{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px}
+    h1{margin:0 0 12px;font-weight:700}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    label{display:block;margin:10px 0 6px;color:var(--muted)}
+    input,select,textarea{width:100%;background:#091120;border:1px solid #2a3a54;color:var(--text);border-radius:12px;padding:12px 14px}
+    textarea{min-height:140px;resize:vertical}
+    .actions{margin-top:16px;display:flex;gap:12px;align-items:center}
+    .btn{background:var(--brand);color:#001018;border:0;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:600}
+    .hint{font-size:.95rem;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
+    .note{margin-top:14px;border-radius:12px;padding:12px 14px;border:1px solid;display:none}
+    .note.ok{display:block;background:#062411;border-color:#134e1f;color:#b7f7c7}
+    .note.err{display:block;background:#2a0e12;border-color:#7f1d1d;color:#fecaca}
+    .tagline{font-size:.9rem;color:var(--muted);margin:-6px 0 18px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="nav">
-      <div class="brand">
-        <div class="brand-badge">D</div> DreamOracle
-      </div>
-      <div style="display:flex;gap:14px;">
-        <a href="/">Anasayfa</a>
-        <a href="/premium.html">Premium</a>
-      </div>
-    </div>
+    <a href="/"><strong>← DreamOracle</strong></a>
+    <h1>Rüyanı Gönder</h1>
+    <p class="tagline">Formu doldur, 24 saat içinde e-postana yanıt gelsin. URL’den geldiysen kategori/paket alanlarını senin için seçtik.</p>
 
     <div class="grid">
-      <div class="card">
-        <h1 style="margin:0 0 6px">Rüyanı Gönder</h1>
-        <p class="muted" style="margin-top:0">Formu doldur, 24 saat içinde e-postana yanıt gelsin. Eğer bu sayfaya bir butondan geldiysen <span class="caps">paket</span> ve <span class="caps">kategori</span> alanları senin için otomatik seçilir.</p>
-
-        <div id="chips" class="badges" style="display:none"></div>
-
-        <form id="dreamForm" style="margin-top:12px">
-          <label for="c-name">Ad Soyad</label>
-          <input id="c-name" name="name" placeholder="Adın Soyadın" required />
-
-          <div class="row">
-            <div>
-              <label for="c-email">E-posta</label>
-              <input id="c-email" name="email" type="email" placeholder="ornek@mail.com" required />
-            </div>
-            <div>
-              <label for="c-priority">Öncelik</label>
-              <select id="c-priority" name="priority">
-                <option value="genel">Genel yorum</option>
-                <option value="iş">İş / para</option>
-                <option value="ilişki">İlişki</option>
-                <option value="sağlık">Sağlık</option>
-              </select>
-            </div>
+      <form id="dreamForm" class="panel" autocomplete="on">
+        <div class="row">
+          <div>
+            <label for="name">Ad Soyad</label>
+            <input id="name" name="name" placeholder="Adın Soyadın" required />
           </div>
-
-          <div class="row">
-            <div>
-              <label for="c-paket">Paket</label>
-              <select id="c-paket" name="paket">
-                <option value="standart">Standart (Ücretsiz)</option>
-                <option value="premium">Premium + Koçluk</option>
-              </select>
-            </div>
-            <div>
-              <label for="c-kategori">Kategori</label>
-              <select id="c-kategori" name="kategori">
-                <option value="ruya">Rüya</option>
-                <option value="tarot">Tarot</option>
-                <option value="kahve">Kahve</option>
-                <option value="yildiz">Yıldız</option>
-                <option value="coach">Yaşam Koçluğu</option>
-              </select>
-            </div>
+          <div>
+            <label for="email">E-posta</label>
+            <input id="email" name="email" type="email" placeholder="eposta@ornek.com" required />
           </div>
+        </div>
 
-          <label for="c-msg">Rüyanız</label>
-          <textarea id="c-msg" name="message" placeholder="Rüyanı olabildiğince detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…"></textarea>
-
-          <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
-            <button class="btn" type="submit">Gönder →</button>
-            <div id="state" class="muted"></div>
+        <div class="row">
+          <div>
+            <label for="paket">Paket</label>
+            <select id="paket" name="paket">
+              <option value="standart">Standart (Ücretsiz)</option>
+              <option value="premium">Premium + Koçluk</option>
+              <option value="mistik">Tarot / Kahve / Yıldız</option>
+            </select>
           </div>
+          <div>
+            <label for="priority">Öncelik</label>
+            <select id="priority" name="priority">
+              <option value="genel">Genel yorum</option>
+              <option value="is">İş / kariyer</option>
+              <option value="iliski">İlişki / aile</option>
+              <option value="saglik">Sağlık / enerji</option>
+            </select>
+          </div>
+        </div>
 
-          <div id="alert" class="callout err" style="display:none"></div>
-          <div id="success" class="callout ok" style="display:none"></div>
-        </form>
-      </div>
+        <div>
+          <label for="kategori">Kategori (isteğe bağlı)</label>
+          <select id="kategori" name="kategori">
+            <option value="">—</option>
+            <option value="ruya">Rüya yorumu</option>
+            <option value="tarot">Tarot</option>
+            <option value="kahve">Kahve</option>
+            <option value="yildiz">Yıldız</option>
+            <option value="kocluk">Yaşam koçluğu</option>
+          </select>
+        </div>
 
-      <aside class="card">
-        <div class="caps">İpuçları</div>
-        <p class="hint">Tekrarlayan semboller, güçlü duygular ve “uyandıktan sonra aklında kalan” sahneler çok yardımcı olur. 3–5 maddelik küçük aksiyon listesi çıkar; Standartta 24 saat içinde e-posta alırsın.</p>
-        <hr style="border:0;border-top:1px solid #243a58;margin:16px 0">
-        <div class="caps">Gizlilik</div>
-        <p class="hint">Verilerini yalnızca yorum/koçluk oluşturmak için kullanırız. Kayıt tutmayız.</p>
+        <div style="margin-top:12px">
+          <label for="message">Rüyanız</label>
+          <textarea id="message" name="message" placeholder="Rüyanı mümkün olduğunca detaylı yaz. Yer, kişiler, hissettiklerin, tekrar eden semboller…"
+            required></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="submit">Gönder →</button>
+          <span id="labelPill" class="hint"></span>
+        </div>
+
+        <div id="noteOk"  class="note ok">Rüyan ulaştı — e-postanı kontrol edebilirsin. ✨</div>
+        <div id="noteErr" class="note err">Bir şeyler ters gitti. Lütfen birazdan tekrar dene.</div>
+      </form>
+
+      <aside class="panel">
+        <h3>İpuçları</h3>
+        <p class="hint">Tekrarlayan semboller, güçlü duygular ve “uyandıktan sonra aklımda kalan”
+          sahneler çok yardımcı olur. 3–5 madde ile küçük aksiyon listesi çıkar.</p>
+        <ul class="hint">
+          <li>Standartta 24 saat içinde e-posta alırsın.</li>
+          <li>Premium’da kısa koçluk zinciri + gün içi mikro plan.</li>
+          <li>Mistik (tarot/kahve/yıldız) isteklerinde “kategori” alanını işaretle.</li>
+        </ul>
       </aside>
     </div>
   </div>
 
   <script>
-    // --- yardımcılar ---
-    const qs = new URLSearchParams(location.search);
-    const byId = (id) => document.getElementById(id);
+    // ——— Yardımcılar
+    const $ = s => document.querySelector(s);
+    const params = new URLSearchParams(location.search);
+    const map = (v, dict, dft) => dict[v] ?? dft;
 
-    // Query param -> form ön seçim + etiketler
-    const paket = qs.get('paket');      // standart | premium
-    const kategori = qs.get('kategori');// ruya | tarot | kahve | yildiz | coach
-    const oncelik = qs.get('oncelik');  // genel | iş | ilişki | sağlık
+    // URL → form ön-seçimler
+    const paketQS    = (params.get('paket')    || '').toLowerCase();  // standart | premium | mistik
+    const kategoriQS = (params.get('kategori') || '').toLowerCase();  // ruya | tarot | kahve | yildiz | kocluk
+    const priorityQS = (params.get('oncelik')  || '').toLowerCase();  // genel | is | iliski | saglik
 
-    if (paket) byId('c-paket').value = paket;
-    if (kategori) byId('c-kategori').value = kategori;
-    if (oncelik) byId('c-priority').value = oncelik;
+    $('#paket').value    = map(paketQS,    {standart:'standart', premium:'premium', mistik:'mistik'}, 'standart');
+    $('#kategori').value = map(kategoriQS, {ruya:'ruya', tarot:'tarot', kahve:'kahve', yildiz:'yildiz', kocluk:'kocluk'}, '');
+    $('#priority').value = map(priorityQS, {genel:'genel', is:'is', iliski:'iliski', saglik:'saglik'}, 'genel');
 
-    // Seçimler varsa üstte chip göster
-    const chips = [];
-    if (paket)    chips.push(`Paket: ${paket}`);
-    if (kategori) chips.push(`Kategori: ${kategori}`);
-    if (oncelik)  chips.push(`Öncelik: ${oncelik}`);
-    if (chips.length) {
-      const box = byId('chips');
-      box.style.display = 'flex';
-      box.innerHTML = chips.map(t => `<span class="badge">${t}</span>`).join('');
-    }
+    // Görsel etiket
+    const pill = $('#labelPill');
+    const pillParts = [];
+    if (paketQS)    pillParts.push(`paket: ${paketQS}`);
+    if (kategoriQS) pillParts.push(`kategori: ${kategoriQS}`);
+    if (pillParts.length) pill.textContent = pillParts.join(' • ');
 
-    // Form submit
-    const form = byId('dreamForm');
-    const stateEl = byId('state');
-    const alertEl = byId('alert');
-    const okEl = byId('success');
+    // API endpoint (aynı projede göreceli path)
+    const API_URL = '/api/send-email';
 
-    form.addEventListener('submit', async (e) => {
+    // Submit
+    $('#dreamForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      alertEl.style.display = 'none';
-      okEl.style.display = 'none';
-      stateEl.textContent = 'Gönderiliyor…';
+      $('#noteOk').style.display = 'none';
+      $('#noteErr').style.display = 'none';
 
       const payload = {
-        name: byId('c-name').value.trim(),
-        email: byId('c-email').value.trim(),
-        message: byId('c-msg').value.trim(),
-        paket: byId('c-paket').value,
-        kategori: byId('c-kategori').value,
-        priority: byId('c-priority').value
+        name:    $('#name').value.trim(),
+        email:   $('#email').value.trim(),
+        paket:   $('#paket').value,
+        kategori:$('#kategori').value || undefined,
+        priority:$('#priority').value,
+        message: $('#message').value.trim()
       };
 
       try {
-        const r = await fetch('/api/send-email', {
+        const r = await fetch(API_URL, {
           method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          headers: { 'Content-Type':'application/json' },
           body: JSON.stringify(payload)
         });
-        const data = await r.json().catch(()=> ({}));
+
+        const text = await r.text();
+        let data; try { data = JSON.parse(text); } catch { data = { raw:text }; }
 
         if (!r.ok || data?.ok === false) {
-          const msg = data?.error || `Sunucu ${r.status} hatası`;
-          alertEl.textContent = `Bir şeyler ters gitti: ${msg}`;
-          alertEl.style.display = 'block';
-          stateEl.textContent = '';
+          $('#noteErr').textContent = `Hata: ${data?.error || ('HTTP ' + r.status)}${data?.relay?.raw ? ' — ' + data.relay.raw : ''}`;
+          $('#noteErr').style.display = 'block';
           return;
         }
 
-        okEl.textContent = 'Rüyan ulaştı. E-postanı kontrol edebilirsin. 👍';
-        okEl.style.display = 'block';
-        stateEl.textContent = '';
-        form.reset();
+        $('#noteOk').style.display = 'block';
+        $('#dreamForm').reset();
+        // URL’den gelen etiketleri koru
+        $('#paket').value    = map(paketQS,    {standart:'standart', premium:'premium', mistik:'mistik'}, 'standart');
+        $('#kategori').value = map(kategoriQS, {ruya:'ruya', tarot:'tarot', kahve:'kahve', yildiz:'yildiz', kocluk:'kocluk'}, '');
+        $('#priority').value = map(priorityQS, {genel:'genel', is:'is', iliski:'iliski', saglik:'saglik'}, 'genel');
       } catch (err) {
-        alertEl.textContent = `Bağlantı hatası: ${err?.message || err}`;
-        alertEl.style.display = 'block';
-        stateEl.textContent = '';
+        $('#noteErr').textContent = `İletim hatası: ${err?.message || err}`;
+        $('#noteErr').style.display = 'block';
       }
     });
   </script>
