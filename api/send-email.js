@@ -1,6 +1,6 @@
 // api/send-email.js
-// Vercel'in desteklediği Node.js runtime'ı:
-export const config = { runtime: 'nodejs' };
+// Vercel Node runtime'ı SÜRÜMLÜ olmalı
+export const config = { runtime: 'nodejs20.x' };
 
 export default async function handler(req, res) {
   // Basit CORS
@@ -9,6 +9,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
+
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
@@ -22,10 +23,9 @@ export default async function handler(req, res) {
       });
     }
 
-    // GAS Web App URL — tercihen ortam değişkeninden
+    // GAS Web App URL (Vercel env'de GAS_RELAY_URL olarak eklenmiş olmalı)
     const relayUrl =
       process.env.GAS_RELAY_URL ||
-      // İSTERSEN BURAYA DOĞRUDAN KENDİ URL’İNİ YAPIŞTIR:
       'https://script.google.com/macros/s/PASTE_YOUR_GAS_WEB_APP_URL/exec';
 
     const payload = {
