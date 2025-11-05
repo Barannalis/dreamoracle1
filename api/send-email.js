@@ -1,63 +1,81 @@
-// Vercel Node.js sunucusuz fonksiyon
-export const config = { runtime: 'nodejs' }; // <-- 'nodejs18.x' DEĞİL
+// /api/send-email.js
+export const config = { runtime: 'nodejs18.x' }; // Vercel Node 18
 
-// Google Apps Script Web App URL'in:
-// Buraya kendi dağıtım URL’ini koy (https://script.google.com/macros/s/AKfyc.../exec)
-const GAS_URL = process.env.GAS_WEB_APP_URL || 'https://script.google.com/macros/s/AKfyc.../exec';
-
-// CORS için kendi domainini tanımla
-const ALLOWED_ORIGINS = [
-  'https://dreamoracle.space',
-  'https://www.dreamoracle.space',
-  'https://dreamoracle1.vercel.app',
-  'http://localhost:3000',
-  'http://127.0.0.1:3000'
-];
-
-function setCors(res, origin) {
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Max-Age', '86400');
-}
+// !!! Buraya kendi Apps Script Web App URL'ini koy:
+const APPS_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbyRvs6oBpNo6jJGunSokN_0pi4gROdelaSjtln2Chenlk5p_C4nhLIt75UJ3CWb8hqY2Q/exec';
+// İstersen Vercel env ile kullan: process.env.APPS_SCRIPT_URL
 
 export default async function handler(req, res) {
-  // CORS
-  const origin = req.headers.origin || '';
-  const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-  setCors(res, allow);
-
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-
   try {
-    if (!GAS_URL || !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(GAS_URL)) {
-      return res.status(500).json({ error: 'GAS URL missing or invalid' });
+    if (req.method !== 'POST') {
+      return res.status(405).json({ ok: false, error: 'Method not allowed' });
     }
 
-    const { name, email, message, package: pkg, priority } = req.body || {};
+    const body = req.body || {};
+    const { name, email, message, paket, kategori, priority } = body;
+
+    // Basit doğrulama
     if (!name || !email || !message) {
-      return res.status(400).json({ error: 'name, email, message zorunludur.' });
+      return res.status(400).json({ ok: false, error: 'Eksik alanlar' });
     }
 
-    const payload = { name, email, message, package: pkg, priority, ts: Date.now() };
+    const payload = {
+      name,
+      email,
+      message,
+      paket: (paket || 'standart').toLowerCase(),
+      kategori: kategori || '',
+      priority: priority || 'genel',
+      sentAt: new Date().toISOString(),
+      ua: req.headers['user-agent'] || '',
+      referer: req.headers.referer || '',
+      ip: req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '',
+    };
 
-    const f = await fetch(GAS_URL, {
+    // 1) JSON POST
+    let r = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
-      // Apps Script bazen redirect atabilir; takip et
-      redirect: 'follow'
     });
 
-    const text = await f.text().catch(() => '');
-    if (!f.ok) {
-      return res.status(502).json({ error: 'GAS error', status: f.status, body: text });
+    if (!r.ok) {
+      // 2) x-www-form-urlencoded POST
+      const form = new URLSearchParams();
+      Object.entries(payload).forEach(([k, v]) => form.append(k, String(v ?? '')));
+
+      r = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: form.toString(),
+      });
+
+      if (!r.ok) {
+        // 3) GET fallback (bazı Apps Script kurulumları sadece doGet ile çalışır)
+        const qs = new URLSearchParams();
+        Object.entries(payload).forEach(([k, v]) => qs.append(k, String(v ?? '')));
+        const url = `${APPS_SCRIPT_URL}?${qs.toString()}`;
+        r = await fetch(url, { method: 'GET' });
+      }
     }
 
-    // GAS bazen plain text döner; JSON’a çevirmeye çalışma
-    return res.status(200).json({ ok: true, relay: 'gas', body: text });
+    // Yanıtı güvenle oku (text -> JSON fallback)
+    const text = await r.text();
+    let data;
+    try { data = JSON.parse(text); } catch { data = { raw: text }; }
+
+    if (!r.ok) {
+      console.error('Relay failed:', r.status, data);
+      return res
+        .status(502)
+        .json({ ok: false, error: 'Relay failed', status: r.status, detail: data });
+    }
+
+    // Başarılı
+    return res.status(200).json({ ok: true, relay: data });
   } catch (err) {
-    return res.status(500).json({ error: 'server error', detail: String(err && err.message || err) });
+    console.error('API send-email error:', err);
+    return res.status(500).json({ ok: false, error: 'Server error', detail: String(err?.message || err) });
   }
 }
